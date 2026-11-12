@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>window.BTBA_PLAYER=true;</script><style id="plHide">body{visibility:hidden}</style>
+<title>BỨC TRANH BÍ ẨN – Chơi game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Montserrat:wght@900&family=Nunito:wght@900&family=Baloo+2:wght@800&family=Anton&family=Roboto+Slab:wght@900&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<script src="fonts.js"></script>
+<script src="engine.js"></script>
+<script src="game.js"></script>
+<style>body.play header,body.play main{display:none}</style>
+<style>
+:root{--ink:#1c2230;--mute:#667085;--line:#e3e1da;--paper:#f5f3ee;--card:#fff;--acc:#d6331f;--acc2:#1e5bd6;--ok:#2e9e44;--r:10px}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:'Be Vietnam Pro',system-ui,sans-serif;color:var(--ink);background:var(--paper);font-size:14px}
+button,input,select,textarea{font:inherit;color:inherit}
+header.top{display:flex;align-items:center;gap:12px;padding:10px 16px;background:#14181f;color:#fff;position:sticky;top:0;z-index:20;flex-wrap:wrap}
+header.top h1{font-size:17px;margin:0;font-weight:800;letter-spacing:.3px;display:flex;align-items:center;gap:10px}
+.logo{width:28px;height:28px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.logo i{background:#fff;border-radius:1px}.logo i:nth-child(2),.logo i:nth-child(4),.logo i:nth-child(5){background:#e53935}.logo i:nth-child(9){background:#1e5bd6}.logo i:nth-child(7){background:#2e9e44}
+header.top .sp{flex:1}
+.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 12px;cursor:pointer;font-weight:600;font-size:13px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn:hover{border-color:#bbb}
+.btn.pri{background:var(--acc);border-color:var(--acc);color:#fff}
+.btn.blue{background:var(--acc2);border-color:var(--acc2);color:#fff}
+.btn.dark{background:#2a303c;border-color:#3a4150;color:#fff}
+.btn.sm{padding:4px 8px;font-size:12px}
+.btn.ghost{background:transparent;border-color:transparent}
+.btn:disabled{opacity:.5;cursor:default}
+main{display:grid;grid-template-columns:minmax(380px,470px) 1fr;height:calc(100% - 52px)}
+@media(max-width:900px){main{grid-template-columns:1fr;height:auto}}
+aside{border-right:1px solid var(--line);background:#fbfaf7;overflow:auto;display:flex;flex-direction:column}
+.tabs{display:flex;position:sticky;top:0;background:#fbfaf7;z-index:5;border-bottom:1px solid var(--line)}
+.tabs button{flex:1;padding:11px 6px;border:0;background:none;cursor:pointer;font-weight:700;color:var(--mute);border-bottom:3px solid transparent}
+.tabs button.on{color:var(--ink);border-bottom-color:var(--acc)}
+.pane{padding:14px;display:none}.pane.on{display:block}
+.sec{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px;margin-bottom:12px}
+.sec h3{margin:0 0 8px;font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--mute)}
+label.f{display:block;font-size:12px;font-weight:600;color:var(--mute);margin:8px 0 4px}
+input[type=text],input[type=number],input[type=password],textarea,select{width:100%;border:1px solid var(--line);border-radius:7px;padding:7px 9px;background:#fff}
+textarea{resize:vertical}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.row>*{flex:1}
+.row.tight>*{flex:none}
+.chk{display:flex;gap:7px;align-items:center;font-size:13px;margin:6px 0;cursor:pointer}
+.chk input{width:auto}
+.seg{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{flex:1;border:0;background:#fff;padding:7px 10px;cursor:pointer;font-weight:600;font-size:13px;white-space:nowrap}
+.seg button.on{background:var(--ink);color:#fff}
+.qcard{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:10px;margin-bottom:10px;border-left:5px solid #ccc}
+.qcard.bad{box-shadow:0 0 0 2px #f6b3a9}
+.qhead{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.qhead b{font-size:13px}
+.qhead select{width:auto;padding:3px 6px;font-size:12px}
+.opt{display:flex;align-items:center;gap:6px;margin-top:5px}
+.opt input[type=radio]{width:auto;accent-color:var(--ok)}
+.opt .L{font-weight:700;width:16px}
+.opt input[type=text]{padding:5px 8px}
+.opt.ok input[type=text]{border-color:var(--ok);background:#f1faf3}
+.dot{width:12px;height:12px;border-radius:50%;display:inline-block;flex:none}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:99px;padding:3px 4px 3px 9px;background:#fff;font-weight:700;font-size:13px}
+.chip select{border:0;padding:2px 4px;width:auto;font-size:12px;background:#f3f2ee;border-radius:99px}
+.warn{background:#fff6e6;border:1px solid #f3cf8a;color:#7a4b00;padding:8px 10px;border-radius:8px;font-size:12.5px;margin-bottom:8px}
+.warn button{margin-top:6px}
+.err{background:#fdecea;border-color:#f3b0a8;color:#8a1c12}
+.okmsg{background:#eaf7ee;border:1px solid #b5e0c1;color:#1d6b33}
+.view{overflow:auto;padding:16px 22px 40px;position:relative}
+.vbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;position:sticky;top:0;z-index:4;background:var(--paper);padding:6px 0}
+.pagewrap{max-width:1100px;margin:0 auto 22px;box-shadow:0 2px 14px rgba(0,0,0,.12);background:#fff}
+.pagewrap.portrait{max-width:760px}
+.plabel{max-width:1100px;margin:0 auto 6px;font-size:12px;color:var(--mute);font-weight:600}
+#maskCv{width:100%;border:1px solid var(--line);border-radius:6px;cursor:crosshair;touch-action:none;image-rendering:pixelated;background:#fff}
+.tools{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0}
+.tools .sw{width:26px;height:26px;border-radius:6px;border:2px solid #fff;box-shadow:0 0 0 1px #ccc;cursor:pointer}
+.tools .sw.on{box-shadow:0 0 0 2px var(--ink)}
+.emo{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}
+.emo button{font-size:22px;padding:4px;border:1px solid var(--line);background:#fff;border-radius:7px;cursor:pointer}
+.emo button.on{border-color:var(--ink);background:#f1efe8}
+.modal{position:fixed;inset:0;background:rgba(15,18,25,.5);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal.on{display:flex}
+.dlg{background:#fff;border-radius:14px;max-width:640px;width:100%;max-height:92vh;overflow:auto;padding:18px}
+.dlg h2{margin:0 0 6px;font-size:18px}
+.dlg p.m{color:var(--mute);margin:0 0 10px;font-size:13px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#14181f;color:#fff;padding:10px 16px;border-radius:10px;z-index:60;font-size:13px;display:none;max-width:90vw}
+.small{font-size:12px;color:var(--mute)}
+pre.fmt{background:#f6f5f1;border:1px solid var(--line);border-radius:8px;padding:8px;font-size:12px;white-space:pre-wrap;margin:6px 0}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+input[type=range]{width:100%}
+.rv{font-size:12px;color:var(--mute);font-weight:700;min-width:34px;text-align:right;flex:none!important}
+.bwbox{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.bwbox canvas{width:100%;border:1px solid var(--line);border-radius:6px;background:#fff;display:block}
+.cbar{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.cchip{display:flex;align-items:center;gap:4px;background:#fff;border:1px solid var(--line);border-radius:99px;padding:2px 8px 2px 3px}
+.cchip input[type=color]{width:26px;height:26px;border:0;padding:0;background:none;cursor:pointer;border-radius:50%}
+.cchip input[type=text]{border:0;padding:2px 0;width:78px;font-weight:700;font-size:12.5px;background:transparent}
+.mathbar{position:sticky;top:44px;z-index:3}
+.mb{display:flex;flex-wrap:wrap;gap:4px}
+.mb button{border:1px solid var(--line);background:#fff;border-radius:6px;padding:3px 7px;cursor:pointer;font-size:13px;min-width:30px}
+.mb button:hover{background:#f1efe8}
+.vb{font-size:12px;border-radius:6px;padding:4px 8px;margin:2px 0 6px;font-weight:600}.vb.ok{background:#eaf7ee;color:#1d6b33}.vb.fx{background:#e8f0fe;color:#1e4fb5}.vb.rv{background:#fff4e5;color:#8a4b00}
+.qprev{margin-top:6px;padding:7px 9px;background:#faf9f5;border:1px dashed #d8d4c8;border-radius:7px;font-family:'Times New Roman',serif;font-size:15px;line-height:1.5}
+.qprev mjx-container{font-size:105%!important}
+.qprev .po{display:inline-block;margin-right:16px}
+.menu{position:relative}
+.menu .dd{position:absolute;right:0;top:110%;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.15);display:none;min-width:230px;z-index:30;padding:5px}
+.menu .dd.on{display:block}
+.menu .dd button{display:block;width:100%;text-align:left;border:0;background:none;padding:8px 10px;border-radius:6px;cursor:pointer;font-weight:600;font-size:13px}
+.menu .dd button:hover{background:#f3f2ee}
+.menu .dd small{display:block;color:var(--mute);font-weight:400}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1><span class="logo"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>BỨC TRANH BÍ ẨN <span style="font-weight:500;opacity:.75;font-size:13px">· Ms. Hằng Đỗ</span></h1>
+  <span class="sp"></span>
+  <button class="btn dark sm" id="bOpen">📂 Mở dự án</button>
+  <button class="btn dark sm" id="bSave">💾 Lưu dự án</button>
+  <div class="menu"><button class="btn" id="bGame" style="background:#16a34a;border-color:#16a34a;color:#fff">🎮 Game tương tác ▾</button>
+    <div class="dd" id="gameMenu">
+      <button data-game="html">Game HTML – Bản 1: Phản hồi ngay<small>Chọn đúng → ô mã tô màu + âm thanh; sai → báo ngay, chọn lại</small></button>
+      <button data-game="html2">Game HTML – Bản 2: Chấm điểm cuối<small>Chọn gì tô nấy (kể cả sai), đến cuối mới báo tranh đúng/sai và số câu đúng</small></button>
+      <button data-game="link1">🌐 Link chơi online – Bản 1 (phản hồi ngay)<small>Gửi link/QR cho học sinh, không cần gửi file</small></button>
+      <button data-game="link2">🌐 Link chơi online – Bản 2 (chấm điểm cuối)<small>Gửi link/QR cho học sinh, không cần gửi file</small></button>
+      <button data-game="ppt">Game PowerPoint tương tác (.pptx)<small>Trình chiếu F5, bấm phương án → slide đúng/sai, tranh hiện dần</small></button>
+    </div></div>
+  <button class="btn blue" id="bPPT">⬇ PowerPoint (.pptx)</button>
+  <div class="menu"><button class="btn pri" id="bPDF">⬇ PDF ▾</button>
+    <div class="dd" id="pdfMenu">
+      <button data-pdf="both">Đề + Đáp án (+ Hướng dẫn GV)<small>Phiếu học sinh, đáp án, trang hướng dẫn tổ chức</small></button>
+      <button data-pdf="student">Chỉ phiếu học sinh</button>
+      <button data-pdf="answer">Chỉ đáp án</button>
+      <button data-pdf="guide">Chỉ hướng dẫn giáo viên<small>2 cách tổ chức hoạt động</small></button>
+    </div></div>
+  <input type="file" id="fOpen" accept=".json" hidden>
+</header>
+<main>
+<aside>
+  <div class="tabs"><button data-tab="q" class="on">1. Câu hỏi</button><button data-tab="p">2. Hình ẩn</button><button data-tab="s">3. Trang phiếu</button></div>
+
+  <!-- CÂU HỎI -->
+  <div class="pane on" id="pane-q">
+    <div class="sec">
+      <h3>Nguồn câu hỏi</h3>
+      <div class="row" style="gap:6px">
+        <button class="btn pri" id="bAI">✨ Tạo bằng AI theo chủ đề</button>
+        <button class="btn" id="bImport">📄 Nhập từ file</button>
+      </div>
+      <div class="row" style="gap:6px;margin-top:6px">
+        <button class="btn" id="bPaste">📋 Dán văn bản</button>
+        <button class="btn" id="bTpl">⬇ File mẫu Excel</button>
+        <button class="btn" id="bFmt">❔ Định dạng</button>
+      </div>
+      <div class="row" style="gap:6px;margin-top:6px">
+        <button class="btn" id="bVerify" style="background:#0f766e;border-color:#0f766e;color:#fff">🔍 Kiểm tra kiến thức bằng AI</button>
+      </div>
+      <input type="file" id="fImport" accept=".docx,.txt,.xlsx,.xls,.csv,.pdf,.md" hidden>
+      <p class="small" style="margin:8px 0 0">Hỗ trợ Word (.docx), PDF, Excel/CSV, TXT. Đáp án đúng nhận theo dòng “Đáp án: B”, dấu * trước phương án, chữ in đậm/gạch chân, hoặc bảng đáp án cuối file.</p>
+    </div>
+    <div class="sec">
+      <div class="row" style="justify-content:space-between"><h3 style="margin:0">Danh sách câu hỏi <span id="qCount"></span></h3>
+        <button class="btn sm" id="bAddQ" style="flex:none">+ Thêm câu</button></div>
+      <label class="chk"><input type="checkbox" id="autoColor"> Tự động chia màu cho câu hỏi theo hình ẩn</label>
+      <div id="colorSum" class="chips" style="margin:4px 0 2px"></div>
+    </div>
+    <div class="sec">
+      <h3>Trộn đáp án đúng</h3>
+      <div class="row" style="gap:6px"><button class="btn pri" id="bRandAns">🎲 Trộn đáp án đúng</button><button class="btn" id="bRandQ">🔀 Trộn thứ tự câu</button></div>
+      <label class="chk"><input type="checkbox" id="autoRotate"> Mỗi lần đổi từ khóa / tranh: đáp án đúng tự nhảy sang vị trí kế tiếp (1A → 1B → 1C → 1D → 1A…)</label>
+      <div class="row" style="gap:6px;margin:4px 0"><button class="btn sm" id="bRotate">↻ Nhảy đáp án +1 ngay</button></div>
+      <label class="chk"><input type="checkbox" id="autoRand"> Tự trộn khi nhập câu hỏi mới hoặc tạo bằng AI</label>
+      <div class="small">Đáp án đúng được chia đều cho A, B, C, D, không lặp một chữ quá 2 câu liền. Phương án kiểu “Cả A và B”, “Tất cả đều đúng” được giữ nguyên chỗ.</div>
+      <div id="ansPattern" style="margin-top:8px"></div>
+    </div>
+    <div class="sec mathbar"><h3>Chèn công thức Toán – Lí – Hóa</h3><div class="mb" id="mathBar"></div><div class="small" style="margin-top:6px">Công thức đặt giữa hai dấu <b>$…$</b> (chuẩn LaTeX), ví dụ <code>$\frac{1}{2}$</code>, <code>$x^{2}$</code>, <code>$\ce{H2SO4}$</code>. Bấm vào ô cần nhập rồi bấm nút; khung xem trước hiện ngay dưới câu.</div></div>
+    <div id="qList"></div>
+    <div class="row"><button class="btn" id="bAddQ2">+ Thêm câu hỏi</button><button class="btn" id="bClearQ">🗑 Xóa hết</button></div>
+  </div>
+
+  <!-- HÌNH ẨN -->
+  <div class="pane" id="pane-p">
+    <div class="sec">
+      <h3>Hình ẩn trong tranh</h3>
+      <div class="seg" id="picMode"><button data-m="text">🔤 Chữ</button><button data-m="image">🖼 Hình</button><button data-m="combo">🖼 Hình + 🔤 Chữ</button></div>
+      <div id="g-text" style="margin-top:10px">
+        <label class="f">Từ khóa ẩn – gõ chữ, app tự biến thành tranh (Enter để xuống dòng)</label>
+        <textarea id="pText" rows="2" style="font-weight:800;font-size:16px" placeholder="VD: NGƯỜI LÁI ĐÒ"></textarea>
+        <label class="f">Kiểu chữ</label><div class="seg" id="pCase"><button data-c="upper">CHỮ IN HOA</button><button data-c="lower">chữ thường</button><button data-c="asis">Giữ như gõ</button></div>
+        <label class="f">Màu của từng từ</label>
+        <div id="wordChips" class="chips"></div>
+        <div class="row" style="margin-top:4px"><div><label class="f">Phông chữ</label><select id="pFont">
+          <option value="Be Vietnam Pro|900">Be Vietnam Pro (đậm)</option><option value="Montserrat|900">Montserrat</option><option value="Nunito|900">Nunito (tròn)</option><option value="Baloo 2|800">Baloo 2 (vui)</option><option value="Anton|400">Anton (cao)</option><option value="Roboto Slab|900">Roboto Slab (chân)</option><option value="Arial|bold">Arial</option></select></div>
+          <div><label class="f">Bố trí</label><select id="pFit"><option value="each">Mỗi dòng vừa khung</option><option value="same">Cỡ chữ đều nhau</option></select></div></div>
+        <label class="chk"><input type="checkbox" id="pStretch"> Kéo giãn chữ cho đầy khung</label>
+        <label class="chk"><input type="checkbox" id="pAutoWrap"> Tự ngắt dòng cụm từ dài (chữ to, mảnh rộng hơn)</label>
+        <label class="f">Độ đậm nét chữ</label><div class="row"><input type="range" id="pThick" min="0" max="2.5" step="0.1"><span class="rv" id="vThick"></span></div>
+        <label class="f">Khoảng cách giữa các dòng chữ ẩn (ô)</label><div class="row"><input type="range" id="pLineGap" min="0.6" max="8" step="0.2"><span class="rv" id="vLineGap"></span></div>
+        <label class="f">Khoảng cách chữ</label><div class="row"><input type="range" id="pSpacing" min="0" max="0.4" step="0.01"><span class="rv" id="vSpacing"></span></div>
+      </div>
+      <div id="g-combo" style="margin-top:8px">
+        <div class="row"><div><label class="f">Bố cục</label><select id="pComboOrder"><option value="img">Hình trên – chữ dưới</option><option value="text">Chữ trên – hình dưới</option></select></div>
+        <div><label class="f">Phần hình chiếm</label><div class="row"><input type="range" id="pComboRatio" min="0.35" max="0.8" step="0.01"><span class="rv" id="vComboRatio"></span></div></div></div>
+      </div>
+    </div>
+    <div class="sec" id="g-image">
+      <h3>Nguồn hình</h3>
+      <div class="seg" id="imgSrc"><button data-s="upload">📷 Ảnh của bạn</button><button data-s="shape">⭐ Hình mẫu</button><button data-s="ai">✨ AI vẽ</button></div>
+      <div id="s-upload" style="margin-top:10px">
+        <label class="f">Tải ảnh nhân vật, con vật, đồ vật… – app tự chuyển thành tranh đen trắng</label>
+        <input type="file" id="fImg" accept="image/*">
+        <div class="small" style="margin-top:4px">Ảnh có phông nền đơn giản sẽ cho kết quả đẹp nhất.</div>
+      </div>
+      <div id="s-shape" style="margin-top:10px">
+        <div class="emo" id="shapeGrid" style="grid-template-columns:repeat(4,1fr)"></div>
+        <label class="f">Biểu tượng emoji (hiển thị tùy máy)</label>
+        <div class="emo" id="emoGrid"></div>
+        <label class="f">Hoặc nhập 1 emoji bất kỳ</label><input type="text" id="pEmoji" maxlength="8">
+      </div>
+      <div id="s-ai" style="margin-top:10px">
+        <label class="f">Mô tả hình muốn AI vẽ</label>
+        <div class="row"><input type="text" id="pAIDesc" placeholder="VD: con thuyền trên sông"><button class="btn pri" id="bAIDraw" style="flex:none">✨ Vẽ</button></div>
+        <div class="small" style="margin-top:4px">Để trống thì AI vẽ theo từ khóa ẩn. Bấm lại để có mẫu khác.</div>
+        <div id="aiDrawMsg"></div>
+      </div>
+      <h3 style="margin-top:14px">Chuyển thành tranh</h3>
+      <label class="f">Kiểu chuyển</label>
+      <select id="pConv"><option value="silhouette">Bóng đen – tách nền tự động</option><option value="bw">Đen trắng theo độ sáng</option><option value="edge">Nét viền (tranh nét)</option><option value="levels">Tầng sáng – tối (2–4 màu)</option><option value="color">Giữ màu gốc (nhiều màu)</option></select>
+      <label class="chk"><input type="checkbox" id="pBgRemove"> Tự xóa phông nền</label>
+      <label class="chk" id="r-detail"><input type="checkbox" id="pKeepDetail"> Giữ chi tiết bên trong (mắt, miệng…) – dễ nhận ra hơn</label>
+      <div id="r-bgtol"><label class="f">Độ mạnh xóa nền</label><div class="row"><input type="range" id="pBgTol" min="10" max="160" step="2"><span class="rv" id="vBgTol"></span></div></div>
+      <div id="r-thr"><label class="f" id="lThr">Ngưỡng</label><div class="row"><input type="range" id="pThr" min="0.05" max="0.95" step="0.01"><span class="rv" id="vThr"></span><button class="btn sm" id="bThrAuto" style="flex:none">Tự động</button></div></div>
+      <label class="f">Làm đậm hình</label><div class="row"><input type="range" id="pImgThick" min="0" max="3" step="1"><span class="rv" id="vImgThick"></span></div>
+      <div id="r-k"><label class="f">Số màu nhận dạng (1–8)</label><div class="row"><input type="range" id="pK" min="1" max="8" step="1"><span class="rv" id="vK"></span></div></div>
+      <div class="small" id="kHint" style="margin-top:2px">Mỗi màu cần ít nhất 1 câu hỏi – hình 8 màu cần từ 8 câu trở lên.</div>
+      <label class="chk"><input type="checkbox" id="pInvert"> Đảo ngược sáng/tối</label>
+      <div class="bwbox"><div><div class="small">Ảnh gốc</div><canvas id="bwOrig"></canvas></div><div><div class="small">Sau khi chuyển</div><canvas id="bwPrev"></canvas></div></div>
+      <label class="f">Màu tô cho từng vùng hình</label>
+      <div id="clusterChips" class="chips"></div>
+    </div>
+    <div class="sec">
+      <h3>Lưới &amp; mảnh</h3>
+      <label class="f">Độ mịn lưới (số cột)</label><div class="row"><input type="range" id="pCols" min="30" max="90" step="2"><span class="rv" id="vCols"></span></div>
+      <label class="f">Kích thước mảnh nền (lớn = ít mảnh)</label><div class="row"><input type="range" id="pBg" min="12" max="140" step="2"><span class="rv" id="vBg"></span></div>
+      <label class="f">Kích thước mảnh trong hình</label><div class="row"><input type="range" id="pFg" min="4" max="60" step="1"><span class="rv" id="vFg"></span></div>
+      <label class="f">Cỡ chữ mã trong ô (pt)</label><div class="row"><input type="range" id="pLab" min="5" max="12" step="0.5"><span class="rv" id="vLab"></span></div>
+      <label class="f">Độ rõ của hình (nhanh)</label>
+      <div class="seg" id="qPreset"><button data-q="48">Ít mảnh – dễ tô</button><button data-q="60">Cân bằng</button><button data-q="72">Rõ nét</button><button data-q="84">Rất chi tiết</button></div>
+      <div class="row" style="margin-top:8px"><button class="btn pri" id="bAutoGrid">✨ Tự tối ưu độ mịn</button><button class="btn" id="bReseed">🎲 Chia mảnh kiểu khác</button></div>
+      <div class="small" id="fidInfo" style="margin-top:6px"></div>
+      <div class="small" style="margin-top:6px" id="partInfo"></div>
+    </div>
+    <div class="sec">
+      <h3>Chỉnh tay hình ẩn</h3>
+      <div class="small">Bấm/kéo trên lưới để tô thêm hoặc xóa ô (ví dụ sửa dấu tiếng Việt).</div>
+      <div class="tools" id="brushes"></div>
+      <div class="row tight" style="gap:6px;margin-bottom:6px"><select id="brushSize" style="width:auto"><option value="1">Cọ 1 ô</option><option value="2">Cọ 2 ô</option><option value="3">Cọ 3 ô</option></select>
+        <button class="btn sm" id="bUndoMask">↶ Hoàn tác</button><button class="btn sm" id="bResetMask">Bỏ chỉnh tay</button></div>
+      <canvas id="maskCv"></canvas>
+      <div class="small" id="maskNote"></div>
+    </div>
+  </div>
+
+  <!-- TRANG -->
+  <div class="pane" id="pane-s">
+    <div class="sec">
+      <h3>Khổ giấy</h3>
+      <div class="row"><div><label class="f">Cỡ giấy</label><select id="mPaper"><option value="A4">A4 (210 × 297 mm)</option><option value="A3">A3 (297 × 420 mm)</option><option value="A5">A5 (148 × 210 mm)</option><option value="B4">B4 (250 × 353 mm)</option><option value="B5">B5 (176 × 250 mm)</option><option value="Letter">Letter (216 × 279 mm)</option><option value="Legal">Legal (216 × 356 mm)</option></select></div></div>
+      <label class="f">Hướng giấy</label>
+      <div class="seg" id="orient"><button data-o="landscape">Ngang (tranh trái – câu hỏi phải)</button><button data-o="portrait">Dọc (tranh trên – câu hỏi dưới)</button></div>
+    </div>
+    <div class="sec">
+      <h3>Giao diện &amp; chế độ in</h3>
+      <label class="f">Chế độ in</label>
+      <div class="seg" id="mPrint"><button data-p="color">🎨 In màu</button><button data-p="bw">⚫ In trắng đen</button></div>
+      <div class="small" style="margin-top:4px">In trắng đen: dùng các tông xám khác nhau cho từng màu, chữ và mã đậm rõ, tiết kiệm mực.</div>
+      <div id="accBox"><label class="f">Màu chủ đề của phiếu</label>
+      <div class="row tight" style="gap:6px;flex-wrap:wrap" id="accSw"></div></div>
+      <label class="f">Dòng phụ đề trên tiêu đề (không bắt buộc)</label><input type="text" id="mSub" placeholder="VD: KHTN 6 – Bài 2: Đo chiều dài">
+      <label class="f">Chân trang (để trống = không hiện)</label><input type="text" id="mFooter" placeholder="Để trống">
+    </div>
+    <div class="sec">
+      <h3>Nội dung phiếu</h3>
+      <label class="f">Tiêu đề phiếu học sinh</label><input type="text" id="mTitle">
+      <label class="chk"><input type="checkbox" id="mShowName"> Hiện dòng Họ tên / Lớp</label>
+      <input type="text" id="mNameLine">
+      <label class="f">Lời hướng dẫn</label><textarea id="mInstr" rows="2"></textarea>
+      <label class="chk"><input type="checkbox" id="mHint"> Hiện dòng yêu cầu tô màu dưới mỗi câu</label>
+      <div id="hintBox">
+        <label class="f">Mẫu câu yêu cầu tô màu – dùng {câu} cho số câu, {màu} cho tên màu</label>
+        <select id="mHintPreset"><option value="">— Chọn mẫu có sẵn —</option><option>Đáp án đúng của câu này: tô màu {màu}</option><option>Mảnh ghép chứa đáp án đúng của câu {câu}, các em tô màu {màu}.</option><option>Câu {câu}: mảnh ghép có chứa đáp án đúng của câu {câu} các em tô màu {màu}.</option><option>Tô màu {màu} vào các mảnh ghép có mã đúng của câu {câu}.</option><option>Tìm mảnh ghép có đáp án đúng và tô màu {màu}.</option></select>
+        <textarea id="mHintTpl" rows="2" style="margin-top:6px"></textarea>
+        <div class="row" style="margin-top:6px"><button class="btn sm" id="bHintAll">✔ Hiện ở tất cả các câu</button><button class="btn sm" id="bHintNone">✕ Ẩn ở tất cả các câu</button></div>
+        <div class="small" style="margin-top:4px">Muốn bật/tắt riêng từng câu: tích ô “Hiện yêu cầu tô màu” trong thẻ câu hỏi.</div>
+      </div>
+      <label class="f">Giãn dòng (khoảng cách giữa các dòng chữ)</label><div class="row"><input type="range" id="mLS" min="1" max="2" step="0.05"><span class="rv" id="vLS"></span></div>
+      <label class="f">Khoảng cách giữa các câu hỏi (mm)</label><div class="row"><input type="range" id="mQGap" min="0" max="12" step="0.5"><span class="rv" id="vQGap"></span></div>
+      <label class="f">Cỡ chữ câu hỏi</label><select id="mQSize"><option value="0">Tự động (vừa 1 trang nếu được)</option><option>9</option><option>9.5</option><option>10</option><option>10.5</option><option>11</option><option>11.5</option><option>12</option><option>13</option><option>14</option><option>16</option></select>
+    </div>
+    <div class="sec">
+      <h3>Trang hướng dẫn giáo viên</h3>
+      <label class="chk"><input type="checkbox" id="mGuide"> Kèm trang hướng dẫn tổ chức hoạt động (2 cách) khi xuất PDF đầy đủ và PowerPoint</label>
+      <div class="small">Trang hướng dẫn tự điền tên tranh, số câu, màu tô, mã đúng và thời lượng. Dòng phụ đề (VD: “KHTN 6 – Đo lường”) được dùng làm tên chủ đề.</div>
+      <button class="btn sm" id="bSeeGuide" style="margin-top:6px">👁 Xem trang hướng dẫn</button>
+    </div>
+    <div class="sec">
+      <h3>Trang đáp án</h3>
+      <label class="f">Tiêu đề đáp án</label><input type="text" id="mATitle">
+      <label class="f">Ghi chú góc phải trang đáp án (để trống = không hiện)</label><input type="text" id="mTeacher" placeholder="Để trống">
+      <label class="f">Tên bức tranh (hiện ở đáp án)</label><input type="text" id="mPicName" placeholder="Tự lấy theo chữ ẩn">
+    </div>
+  </div>
+</aside>
+
+<section class="view" id="view">
+  <div class="vbar">
+    <div class="seg" id="viewMode" style="width:auto"><button data-v="student">Phiếu học sinh</button><button data-v="answer">Đáp án</button><button data-v="guide">Hướng dẫn GV</button><button data-v="both">Tất cả</button></div>
+    <span class="small" id="status"></span>
+  </div>
+  <div class="vbar" style="top:46px;padding-top:0"><span class="small" style="font-weight:700">🎨 Màu đáp án:</span><div class="cbar" id="colorBar"></div><button class="btn sm" id="bPalReset" title="Về màu mặc định">↺ Mặc định</button></div>
+  <div id="warns"></div>
+  <div id="pages"></div>
+</section>
+</main>
+
+<!-- AI dialog -->
+<div class="modal" id="dAI"><div class="dlg">
+  <h2>✨ Tạo câu hỏi bằng AI</h2>
+  <p class="m">Nhập chủ đề, AI sẽ soạn câu hỏi trắc nghiệm 4 phương án kèm đáp án và giải thích. Có thể đính kèm tài liệu bài học làm nguồn.</p>
+  <div class="row"><div><label class="f">Môn học</label><input type="text" id="aiSubj" placeholder="VD: Khoa học tự nhiên"></div><div><label class="f">Lớp</label><input type="text" id="aiGrade" placeholder="VD: 6"></div></div>
+  <label class="f">Chủ đề / bài học</label><input type="text" id="aiTopic" placeholder="VD: Đo chiều dài, khối lượng">
+  <div class="row"><div><label class="f">Số câu hỏi</label><input type="number" id="aiN" min="1" max="30" value="5"></div><div><label class="f">Mức độ</label><select id="aiLvl"><option>Nhận biết – Thông hiểu</option><option>Thông hiểu – Vận dụng</option><option>Hỗn hợp các mức độ</option><option>Vận dụng cao</option></select></div></div>
+  <label class="f">Nội dung / kiến thức muốn hỏi (không bắt buộc)</label><textarea id="aiContent" rows="2" placeholder="VD: công thức tính vận tốc, đổi đơn vị; giải phương trình bậc nhất…"></textarea>
+  <label class="chk"><input type="checkbox" id="aiLatex" checked> Viết công thức Toán/Lí/Hóa chuẩn (hiển thị đẹp như sách giáo khoa)</label>
+  <label class="f">Yêu cầu thêm (không bắt buộc)</label><input type="text" id="aiNote" placeholder="VD: có câu tính toán, dùng đơn vị SI">
+  <label class="f">Tài liệu nguồn (không bắt buộc) – dán nội dung hoặc chọn file</label>
+  <textarea id="aiSrc" rows="3" placeholder="Dán nội dung bài học…"></textarea>
+  <input type="file" id="fAISrc" accept=".docx,.txt,.pdf,.md" style="margin-top:6px">
+  <label class="chk"><input type="checkbox" id="aiVerify" checked> <b>Tự kiểm tra lại kiến thức bằng AI</b> (giải độc lập từng câu, sửa câu sai – khuyên dùng)</label>
+  <label class="chk"><input type="checkbox" id="aiHidden" checked> Gợi ý luôn chữ ẩn liên quan chủ đề</label>
+  <div class="seg" id="aiAppend" style="margin-top:6px"><button data-a="replace" class="on">Thay thế câu hiện có</button><button data-a="append">Thêm vào cuối</button></div>
+  <div id="aiKeyBox" style="display:none;margin-top:10px" class="sec">
+    <h3>Kết nối AI (bản cài trên máy)</h3>
+    <div class="small">Bản cài trên máy gọi AI bằng khóa API Anthropic của bạn (lấy tại console.anthropic.com). Khóa chỉ lưu trên máy này.</div>
+    <label class="f">Khóa API</label><input type="password" id="aiKey" placeholder="sk-ant-...">
+    <label class="f">Mô hình</label><select id="aiModel"><option value="claude-sonnet-5-5">Claude Sonnet 5.5 (khuyên dùng)</option><option value="claude-haiku-5-5">Claude Haiku 5.5 (nhanh, rẻ)</option><option value="claude-opus-5-5">Claude Opus 5.5 (mạnh nhất)</option></select>
+  </div>
+  <div id="aiMsg" style="margin-top:10px"></div>
+  <div class="row" style="margin-top:12px;justify-content:flex-end"><button class="btn" data-close style="flex:none">Đóng</button><button class="btn pri" id="aiGo" style="flex:none">Tạo câu hỏi</button></div>
+</div></div>
+
+<!-- Import dialog -->
+<div class="modal" id="dImp"><div class="dlg">
+  <h2 id="impTitle">Nhập câu hỏi</h2>
+  <p class="m" id="impDesc">Dán văn bản đề trắc nghiệm vào ô dưới.</p>
+  <textarea id="impText" rows="10" placeholder="Câu 1. ...&#10;A. ...&#10;B. ...&#10;C. ...&#10;D. ...&#10;Đáp án: A"></textarea>
+  <div id="impMsg" style="margin-top:8px"></div>
+  <div class="row" style="margin-top:12px;justify-content:flex-end;gap:6px">
+    <button class="btn" data-close style="flex:none">Đóng</button>
+    <button class="btn" id="impAI" style="flex:none">✨ Nhờ AI đọc</button>
+    <button class="btn" id="impAppend" style="flex:none">Thêm vào cuối</button>
+    <button class="btn pri" id="impReplace" style="flex:none">Thay thế danh sách</button>
+  </div>
+</div></div>
+
+<!-- Format dialog -->
+<div class="modal" id="dFmt"><div class="dlg">
+  <h2>Định dạng file câu hỏi</h2>
+  <p class="m">Word / TXT / PDF – viết như đề trắc nghiệm thông thường:</p>
+<pre class="fmt">Câu 1. Trong các phép đổi sau, phép đổi nào đúng?
+A. 1,5 km = 1500 m.        B. 1,5 km = 150 m.
+C. 1,5 km = 15000 m.       D. 1,5 km = 15 m.
+Đáp án: A
+Giải thích: 1 km = 1000 m nên 1,5 km = 1500 m.
+
+Câu 2. Khối lượng quả tạ là 2500 g. Đổi ra kg là:
+*A. 2,5 kg.   B. 25 kg.   C. 0,25 kg.   D. 250 kg.</pre>
+  <p class="m">Cách đánh dấu đáp án đúng: dòng <b>Đáp án: X</b>; dấu <b>*</b> trước chữ cái; in <b>đậm</b> hoặc <u>gạch chân</u> phương án đúng (file Word); hoặc bảng đáp án cuối file kiểu <b>Đáp án: 1A 2B 3C</b>.</p>
+  <p class="m">Excel / CSV – các cột: <b>Câu hỏi | A | B | C | D | Đáp án | Giải thích | Màu</b> (cột Màu không bắt buộc: đỏ, xanh dương, xanh lá, cam, tím…). Bấm “File mẫu Excel” để tải mẫu.</p>
+  <div class="row" style="justify-content:flex-end"><button class="btn pri" data-close style="flex:none">Đã hiểu</button></div>
+</div></div>
+
+<div class="modal" id="dLink"><div class="dlg" style="max-width:720px">
+  <h2>🌐 Link chơi online</h2>
+  <p class="m">Học sinh bấm link (hoặc quét mã QR) → nhập tên → chơi. Chỉ thấy màn hình game, không thấy đề gốc hay đáp án.</p>
+  <div class="seg" id="lkMode" style="margin-bottom:8px"><button data-m="instant">Bản 1 – Phản hồi ngay</button><button data-m="final">Bản 2 – Chấm điểm cuối</button></div>
+  <div class="small" style="margin:4px 0"><b>Trang chơi của học sinh</b> (GitHub Pages – tự gửi điểm vào Google Sheet, không cần bấm gửi):<input id="lkBase" style="width:100%;margin-top:3px" placeholder="https://do-hang.github.io/buc-tranh-bi-an/"></div>
+  <label class="chk"><input type="checkbox" id="lkAsk"> Học sinh nhập <b>họ tên, lớp</b> trước khi chơi</label>
+  <label class="chk"><input type="checkbox" id="lkUseSheet"> 📊 Ghi kết quả của học sinh vào <b>Google Sheet</b> của tôi</label>
+  <div id="lkSheetBox" class="sec" style="margin:4px 0 8px">
+    <label class="f">Link Web App (Apps Script) của Google Sheet</label>
+    <input type="text" id="lkSheet" placeholder="https://script.google.com/macros/s/…/exec">
+    <div class="small" id="lkSheetOk" style="margin-top:3px"></div>
+    <div class="row" style="margin-top:6px;gap:6px;justify-content:flex-start"><button class="btn sm" id="lkGuide" style="flex:none">📘 Hướng dẫn kết nối (3 phút)</button><a class="btn sm" id="lkTest" target="_blank" rel="noopener" style="flex:none;text-decoration:none">🧪 Kiểm tra kết nối</a></div>
+  </div>
+  <label class="f">Link gửi học sinh</label>
+  <textarea id="lkText" rows="3" readonly style="font-size:12.5px;word-break:break-all"></textarea>
+  <div class="small" id="lkInfo" style="margin-top:4px"></div>
+  <div id="lkShortBox" class="sec" style="margin:8px 0;display:none">
+    <div class="small" style="margin-bottom:6px"><b>Rút gọn link (miễn phí, 2 bước):</b> ① bấm nút dưới – trang TinyURL mở ra và hiện link ngắn; ② sao chép link ngắn đó và dán vào ô bên cạnh.</div>
+    <div class="row" style="gap:6px"><a class="btn pri" id="lkTiny" target="_blank" rel="noopener" style="flex:none;text-decoration:none">🔗 ① Tạo link rút gọn</a><input type="text" id="lkShort" placeholder="② Dán link rút gọn vào đây (https://tinyurl.com/…)"></div>
+  </div>
+  <div class="row" style="margin-top:8px;justify-content:flex-start;gap:6px"><button class="btn pri" id="lkCopy" style="flex:none">📋 Sao chép link</button><a class="btn" id="lkOpen" target="_blank" rel="noopener" style="flex:none;text-decoration:none">▶ Mở thử</a><button class="btn" id="lkQRsave" style="flex:none">⬇ Tải mã QR</button></div>
+  <div id="lkQR" style="margin-top:10px;text-align:center"></div>
+  <div class="row" style="margin-top:12px;justify-content:flex-end"><button class="btn" data-close style="flex:none">Đóng</button></div>
+</div></div>
+<div class="modal" id="dGs"><div class="dlg" style="max-width:760px">
+  <h2>📊 Kết nối Google Sheet – nhận kết quả học sinh</h2>
+  <ol style="font-size:13.5px;line-height:1.6;padding-left:20px;margin:6px 0 10px">
+    <li>Mở <a href="https://sheets.new" target="_blank" rel="noopener">sheets.new</a> để tạo một Google Sheet mới (đặt tên, VD: “Kết quả Bức tranh bí ẩn”).</li>
+    <li>Trên thanh menu chọn <b>Tiện ích mở rộng → Apps Script</b>.</li>
+    <li>Xóa hết mã có sẵn, dán <b>toàn bộ mã bên dưới</b> (bấm “Sao chép mã”), bấm 💾 Lưu.</li>
+    <li>Bấm <b>Triển khai → Tùy chọn triển khai mới</b> → biểu tượng ⚙ chọn <b>Ứng dụng web</b>. Mục “Thực thi dưới dạng”: <b>Tôi</b>; “Người có quyền truy cập”: <b>Bất kỳ ai</b>. Bấm <b>Triển khai</b>, cấp quyền cho tài khoản của bạn.</li>
+    <li>Sao chép <b>URL ứng dụng web</b> (dạng https://script.google.com/macros/s/…/exec), dán vào ô “Link Web App” trong app → bấm “🧪 Kiểm tra kết nối”.</li>
+  </ol>
+  <div class="small">Kết quả ghi vào trang tính “Kết quả”: thời gian nộp, họ tên, lớp, tên bức tranh, chế độ, số câu đúng/tổng, tỉ lệ, điểm, thời gian làm, số lần chọn sai, đáp án đã chọn. Chỉ cần làm 1 lần – dùng chung cho mọi game.</div>
+  <textarea id="gsCode" rows="12" readonly style="font-family:Consolas,monospace;font-size:12px;margin-top:8px"></textarea>
+  <div class="row" style="margin-top:10px;justify-content:flex-end;gap:6px"><button class="btn pri" id="gsCopy" style="flex:none">📋 Sao chép mã</button><button class="btn" data-close style="flex:none">Đóng</button></div>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+const E = window.GMBT, { PALETTE, LET } = E;
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const CYCLE = [0, 1, 2, 3, 4, 6, 8, 7];
+const EMOJIS = ['⭐','❤️','🐟','🌸','🍎','🏠','🐱','🌳','☀️','🚀','⛵','🦋','🐢','🎈','🍀','🌙','🐘','🦆','🍉','✈️','⚽','🔔','🎁','🌈'];
+
+const SAMPLE_Q = [
+  { text: 'Trong các phép đổi đơn vị chiều dài sau đây, phép đổi nào là đúng?', options: ['1,5 km = 1500 m.', '1,5 km = 150 m.', '1,5 km = 15000 m.', '1,5 km = 15 m.'], correct: 0, color: 0, explain: '1 km = 1000 m nên 1,5 km = 1500 m.' },
+  { text: 'Khối lượng của một quả tạ là 2500 g. Đổi sang đơn vị kilôgam (kg), kết quả là:', options: ['2,5 kg.', '25 kg.', '0,25 kg.', '250 kg.'], correct: 0, color: 1, explain: '2500 g : 1000 = 2,5 kg.' },
+  { text: 'Chỉ số khối cơ thể BMI = m/h² (m tính bằng kg, h tính bằng m). Một học sinh có khối lượng 45 kg và chiều cao 1,5 m. Chỉ số BMI của học sinh này là:', options: ['18.', '22.', '20.', '25.'], correct: 2, color: 0, explain: '45 : (1,5 × 1,5) = 45 : 2,25 = 20.' },
+  { text: 'Để đo chiều dài của một cuốn sách một cách thuận tiện và chính xác nhất, dụng cụ nào sau đây là phù hợp?', options: ['Thước cuộn có GHĐ 5 m.', 'Thước kẻ thẳng có GHĐ 30 cm, ĐCNN 1 mm.', 'Thước dây có GHĐ 1,5 m.', 'Thước kẹp có ĐCNN 0,1 mm.'], correct: 1, color: 0, explain: 'Thước kẻ 30 cm vừa đủ dài và có độ chia nhỏ phù hợp với cuốn sách.' },
+  { text: 'Khi đo khối lượng của một vật bằng cân đồng hồ, thao tác nào sau đây là ĐÚNG?', options: ['Đặt mắt nhìn xiên từ bên phải mặt đồng hồ.', 'Đặt mắt nhìn vuông góc với mặt đồng hồ tại vị trí kim chỉ thị.', 'Đọc kết quả ngay khi kim đồng hồ vẫn đang dao động mạnh.', 'Không cần điều chỉnh kim về vạch số 0 trước khi cân.'], correct: 1, color: 2, explain: 'Nhìn vuông góc giúp tránh sai số khi đọc kim chỉ thị.' },
+];
+function defaults() { return {
+  meta: { title: 'BỨC TRANH BÍ ẨN', answerTitle: 'ĐÁP ÁN: BỨC TRANH BÍ ẨN', teacherNote: '', showName: true, nameLine: 'Họ và tên: ................................   Lớp: ...........', instruction: 'Hãy tìm ra bức tranh bằng cách tô vào câu hỏi chứa đáp án đúng trong các câu hỏi dưới đây.', showColorHint: true, pictureName: '', printMode: 'color', accent: '#1F3A5F', subtitle: '', footer: '', hintTpl: 'Đáp án đúng của câu này: tô màu {màu}', orientation: 'landscape', paper: 'A4', lineSpacing: 1.2, qGap: 3.5, qSize: 0 },
+  questions: JSON.parse(JSON.stringify(SAMPLE_Q)), autoColor: false,
+  pic: { mode: 'text', text: 'NGƯỜI\nLÁI ĐÒ', wordColors: [0, 1, 2], font: 'Be Vietnam Pro|900', fit: 'each', stretch: true, thick: 0.7, spacing: 0.1, emoji: 'shape:fish', image: null, invert: false, thr: 0.6, k: 2, clusterMap: {}, imgSrc: 'shape', conv: 'color', bgRemove: false, bgTol: 60, thrAuto: true, imgThick: 1, comboOrder: 'img', comboRatio: 0.6, lineGap: 1.4, case: 'upper', aiSvg: null, aiDesc: '', cols: 60, bgSize: 40, fgSize: 14, labSize: 8.5, seed: 7 },
+  maskEdit: null, view: 'student', palette: {}, autoRand: true }; }
+let st = load() || defaults();
+function migrate(o) { const d = defaults(); const r = Object.assign(d, o, { meta: Object.assign(d.meta, o.meta), pic: Object.assign(d.pic, o.pic) }); if (r.pic.mode === 'emoji') { r.pic.mode = 'image'; r.pic.imgSrc = 'shape'; } if (r.pic.mode === 'image' && o.pic && o.pic.image && !o.pic.imgSrc) r.pic.imgSrc = 'upload'; r.palette = r.palette || {}; if (r.meta.teacherNote === 'Dành cho giáo viên') r.meta.teacherNote = ''; if (r.meta.footer === 'BỨC TRANH BÍ ẨN – Ms. Hằng Đỗ') r.meta.footer = ''; if (r.meta.title === 'GIẢI MÃ BỨC TRANH') r.meta.title = 'BỨC TRANH BÍ ẨN'; if (r.meta.answerTitle === 'ĐÁP ÁN: GIẢI MÃ BỨC TRANH') r.meta.answerTitle = 'ĐÁP ÁN: BỨC TRANH BÍ ẨN'; return r; }
+function load() { try { const s = localStorage.getItem('gmbt-v1'); if (!s) return null; return migrate(JSON.parse(s)); } catch (e) { return null; } }
+let saveT = 0; function persist() { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem('gmbt-v1', JSON.stringify(st)); } catch (e) { try { const c = Object.assign({}, st, { pic: Object.assign({}, st.pic, { image: null }) }); localStorage.setItem('gmbt-v1', JSON.stringify(c)); } catch (e2) {} } }, 400); }
+
+function toast(m, ms) { const t = $('#toast'); t.textContent = m; t.style.display = 'block'; clearTimeout(t._t); t._t = setTimeout(() => t.style.display = 'none', ms || 3200); }
+const capP = {}; function cap(name) { if (!capP[name]) capP[name] = (window.claude && window.claude.use) ? window.claude.use(name).catch(() => null) : Promise.resolve(null); return capP[name]; }
+const libs = {}; function loadScript(src) { if (!libs[src]) libs[src] = new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => rej(new Error('Không tải được ' + src)); document.head.appendChild(s); }); return libs[src]; }
+async function saveFile(name, blob) {
+  const d = await cap('downloads');
+  if (d) { try { await d.save({ filename: name, data: blob }); toast('Đã lưu: ' + name); } catch (e) { toast(e && e.code === 'declined' ? 'Đã hủy lưu file.' : 'Không lưu được: ' + (e && e.message || e)); } return; }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 2000); toast('Đã tạo file: ' + name);
+}
+function b64ToBuf(b) { const s = atob(b); const u = new Uint8Array(s.length); for (let i = 0; i < s.length; i++) u[i] = s.charCodeAt(i); return u.buffer; }
+async function initFonts() { const F = window.__FONTS; const list = [['LibSans', F.sansR, '400'], ['LibSans', F.sansB, '700'], ['LibSerif', F.serifR, '400'], ['LibSerif', F.serifB, '700']];
+  for (const [n, b, w] of list) { const f = new FontFace(n, b64ToBuf(b), { weight: w }); await f.load(); document.fonts.add(f); } }
+
+/* ============ MẶT NẠ HÌNH ẨN ============ */
+function caseOf(t) { t = String(t).normalize('NFC'); const c = st.pic.case || 'upper'; return c === 'upper' ? t.toUpperCase() : c === 'lower' ? t.toLowerCase() : t; }
+function words() { const out = []; caseOf(st.pic.text).split('\n').forEach((ln, li) => ln.trim().split(/\s+/).filter(Boolean).forEach(w => out.push({ w, li }))); return out; }
+function splitMarks(ch) { const d = ch.normalize('NFD'); let base = d[0]; let iDot = false; if (base === 'i') { base = '\u0131'; iDot = true; } const marks = []; for (const c of d.slice(1)) { if (c === '̛') base += c; else marks.push(c); }
+  const layers = [base.normalize('NFC')]; let acc = base; if (iDot && !marks.some(mk => mk !== '\u0323')) marks.unshift('\u0307'); marks.forEach(mk => { acc += mk; layers.push(acc.normalize('NFC')); });
+  const dirs = marks.map(mk => mk === '̣' ? 1 : -1); return { base: layers[0], layers, dirs, has: marks.length > 0, above: dirs.some(x => x < 0), above2: dirs.filter(x => x < 0).length > 1, below: dirs.some(x => x > 0) }; }
+async function textMask(W, H) {
+  const p = st.pic; const [family, weight] = p.font.split('|');
+  try { await document.fonts.load(`${weight} 100px "${family}"`, 'ẮƯỜĐÀẬỆ'); } catch (e) {}
+  let lines = []; let wi = 0; caseOf(st.pic.text).split('\n').forEach(ln => { const ws = ln.trim().split(/\s+/).filter(Boolean); if (ws.length) lines.push(ws.map(w => ({ w, c: p.wordColors[wi] != null ? p.wordColors[wi++] : CYCLE[(wi++) % CYCLE.length] }))); });
+  const mask = new Int16Array(W * H).fill(-1); textMask.cov = new Float32Array(W * H); if (!lines.length) return mask;
+  if (p.autoWrap !== false && lines.length === 1 && lines[0].length >= 2 && lines[0].reduce((a, x) => a + x.w.length, 0) >= 7) { const ws = lines[0]; let best = 1, bd = 1e9; for (let i = 1; i < ws.length; i++) { const L1 = ws.slice(0, i).reduce((a, x) => a + x.w.length + 1, 0), L2 = ws.slice(i).reduce((a, x) => a + x.w.length + 1, 0); if (Math.abs(L1 - L2) < bd) { bd = Math.abs(L1 - L2); best = i; } } lines = [ws.slice(0, best), ws.slice(best)]; }
+  const K = 6, cw = W * K, ch = H * K; const cv = document.createElement('canvas'); cv.width = cw; cv.height = ch; const ctx = cv.getContext('2d', { willReadFrequently: true });
+  const fontStr = px => `${weight} ${px}px "${family}", Arial, sans-serif`;
+  ctx.font = fontStr(100); const sp = p.spacing * 100, spaceW = ctx.measureText(' ').width;
+  const lm = lines.map(ws => { let x = 0, asc = 0, desc = 0, ab = false, ab2 = false, be = false; const items = []; ws.forEach((wd, j) => { if (j) x += spaceW + sp * 2; for (const c of wd.w) { const m = ctx.measureText(c); const sm = splitMarks(c); ab = ab || sm.above; ab2 = ab2 || sm.above2; be = be || sm.below; items.push({ c, x, col: wd.c, mw: m.width, sm }); asc = Math.max(asc, m.actualBoundingBoxAscent); desc = Math.max(desc, m.actualBoundingBoxDescent); x += m.width + sp; } x -= sp; }); return { items, w: Math.max(1, x), asc, desc, exT: ab2 ? 2.6 * K : ab ? 1.3 * K : 0, exB: be ? 1.1 * K : 0 }; });
+  const th = p.thick * K, m = 1.6 * K + th / 2, aw = cw - 2 * m, ah = ch - 2 * m;
+  let sc = lm.map(l => aw / l.w); if (p.fit === 'same') { const mn = Math.min(...sc); sc = sc.map(() => mn); }
+  const minGap = (p.lineGap != null ? p.lineGap : 1.4) * K; const extra = lm.reduce((a, l) => a + l.exT + l.exB, 0);
+  const nat = lm.reduce((a, l, i) => a + (l.asc + l.desc) * sc[i], 0); const availH = ah - minGap * (lm.length - 1) - extra;
+  if (nat > availH) { const f = availH / nat; sc = sc.map(s => s * f); }
+  const nat2 = lm.reduce((a, l, i) => a + (l.asc + l.desc) * sc[i], 0);
+  const fy = p.stretch ? Math.max(1, Math.min(2.4, (ah - extra - minGap * (lm.length - 1) - 1.2 * K) / nat2)) : 1;
+  const used = nat2 * fy + extra + minGap * (lm.length - 1); const gap = minGap; const top0 = m + Math.max(0, (ah - used) / 2);
+  // --- dựng từng ký tự: thân chữ và dấu tách riêng ---
+  const chars = []; let Y = top0;
+  lm.forEach((l, li) => { const s = sc[li]; const x0 = (cw - l.w * s) / 2; const top = Y + l.exT; const lh = (l.asc + l.desc) * s * fy;
+    l.items.forEach(it => { const X0 = Math.max(0, Math.floor(x0 + it.x * s - th - 2 * K)), X1 = Math.min(cw, Math.ceil(x0 + (it.x + it.mw) * s + th + 2 * K)); const Y0 = Math.max(0, Math.floor(top - K)), Y1 = Math.min(ch, Math.ceil(top + lh + K)); if (X1 <= X0 || Y1 <= Y0) return;
+      const draw = (txt) => { ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(X0, Y0, X1 - X0, Y1 - Y0); ctx.fillStyle = '#000'; ctx.strokeStyle = '#000'; ctx.lineJoin = 'round'; ctx.setTransform(1, 0, 0, fy, 0, top); ctx.font = fontStr(100 * s); ctx.lineWidth = th / Math.sqrt(fy); ctx.fillText(txt, x0 + it.x * s, l.asc * s); if (th > 0) ctx.strokeText(txt, x0 + it.x * s, l.asc * s); ctx.setTransform(1, 0, 0, 1, 0, 0); return ctx.getImageData(X0, Y0, X1 - X0, Y1 - Y0).data; };
+      const L = it.sm.layers.map(t => draw(t)); const rw = X1 - X0; const nl = L.length;
+      const cells = new Map(); const gx0 = Math.floor(X0 / K), gx1 = Math.ceil(X1 / K), gy0 = Math.floor(Y0 / K), gy1 = Math.ceil(Y1 / K);
+      for (let gy = gy0; gy < gy1 && gy < H; gy++) for (let gx = gx0; gx < gx1 && gx < W; gx++) { const acc = new Float32Array(nl); for (let yy = gy * K; yy < gy * K + K; yy++) { if (yy < Y0 || yy >= Y1) continue; for (let xx = gx * K; xx < gx * K + K; xx++) { if (xx < X0 || xx >= X1) continue; const o = ((yy - Y0) * rw + (xx - X0)) * 4 + 3; acc[0] += L[0][o]; for (let k = 1; k < nl; k++) if (L[k - 1][o] < 60) acc[k] += L[k][o]; } }
+        let any = false; for (let k = 0; k < nl; k++) { acc[k] /= K * K * 255; if (acc[k] > 0.05) any = true; } if (any) cells.set(gy * W + gx, acc); }
+      chars.push({ col: it.col, cells, sm: it.sm }); });
+    Y += l.exT + lh + l.exB + gap; });
+  // --- phân quyền ô: id = 2*ký tự + (0 thân, 1 dấu) ---
+  const N = W * H, own = new Int32Array(N).fill(-1), oc = new Float32Array(N);
+  // ngưỡng giữ nguyên diện tích nét chữ (không làm mảnh/dày nét)
+  const covAll = new Float32Array(N); const bv = []; chars.forEach(c => c.cells.forEach((acc, cell) => { let t = 0; for (let k = 0; k < acc.length; k++) t += acc[k]; covAll[cell] = Math.min(1, Math.max(covAll[cell], t)); if (acc[0] > 0.05) bv.push(acc[0]); }));
+  let TB = 0.42; if (bv.length > 20) { const area = bv.reduce((a, v) => a + v, 0); bv.sort((a, b) => b - a); const k = Math.min(bv.length - 1, Math.max(0, Math.round(area) - 1)); TB = Math.max(0.33, Math.min(0.52, bv[k])); } const TM = 0.3; textMask.cov = covAll;
+  const P = 8; const isBase = o => o >= 0 && o % P === 0;
+  chars.forEach((c, ci) => c.cells.forEach((acc, cell) => { if (acc[0] >= TB && acc[0] > oc[cell]) { own[cell] = ci * P; oc[cell] = acc[0]; } }));
+  chars.forEach((c, ci) => c.cells.forEach((acc, cell) => { for (let k = 1; k < acc.length; k++) if (acc[k] >= TM && own[cell] < 0) { own[cell] = ci * P + k; oc[cell] = acc[k]; } }));
+  const NB8 = [[-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1]];
+  const nbs = (i, f) => { const x = i % W, y = (i / W) | 0; for (const [dx, dy] of NB8) { const X = x + dx, Yy = y + dy; if (X >= 0 && Yy >= 0 && X < W && Yy < H) f(Yy * W + X); } };
+  const comps4 = (cells) => { const set = new Set(cells), seen = new Set(), out = []; for (const c of cells) { if (seen.has(c)) continue; const q = [c]; seen.add(c); for (let k = 0; k < q.length; k++) { const i = q[k], x = i % W; for (const n of [x > 0 ? i - 1 : -1, x < W - 1 ? i + 1 : -1, i - W, i + W]) if (n >= 0 && n < N && set.has(n) && !seen.has(n)) { seen.add(n); q.push(n); } } out.push(q); } return out; };
+  // 1) thân chữ của các ký tự khác nhau không được chạm nhau (kể cả chéo)
+  for (let it = 0; it < 6; it++) { let ch2 = false; for (let i = 0; i < N; i++) { if (!isBase(own[i])) continue; nbs(i, n => { if (isBase(own[i]) && isBase(own[n]) && own[n] !== own[i]) { const kill = oc[n] < oc[i] ? n : i; own[kill] = -1; ch2 = true; } }); } if (!ch2) break; }
+  // bỏ mảnh vụn của thân chữ
+  chars.forEach((c, ci) => { const cells = []; for (let i = 0; i < N; i++) if (own[i] === ci * P) cells.push(i); const cs = comps4(cells).sort((a, b) => b.length - a.length); cs.slice(1).forEach(cp => { if (cp.length < 3) cp.forEach(i => own[i] = -1); }); });
+  // 2) dấu: tách khỏi thân chữ ít nhất 1 ô, dời lên/xuống nếu cần, đủ lớn để ghi mã
+  chars.forEach((c, ci) => { if (!c.sm.has) return;
+    const ids = c.sm.dirs.map((d, k) => ci * P + k + 1); const G0 = ids.map(id => { const g = []; for (let i = 0; i < N; i++) if (own[i] === id) { g.push(i); own[i] = -1; } return g; });
+    ids.forEach((id, k) => { const G = G0[k]; if (!G.length) return; const dir = c.sm.dirs[k]; let placed = null;
+      for (let d = 0; d <= 4 && !placed; d++) { const sh = G.map(i => i + dir * d * W); if (sh.some(i => i < 0 || i >= N || own[i] >= 0)) continue; const set = new Set(sh); let ok = true; for (const i of sh) { nbs(i, n => { if (own[n] >= 0 && own[n] !== id && !set.has(n)) ok = false; }); if (!ok) break; } if (ok) placed = sh; }
+      if (!placed) placed = G.filter(i => { if (own[i] >= 0) return false; let ok = true; nbs(i, n => { if (own[n] >= 0 && own[n] !== id) ok = false; }); return ok; });
+      placed.forEach(i => own[i] = id);
+      comps4(placed).forEach(cp => { let guard = 0; while (cp.length < 4 && guard++ < 8) { let add = -1; for (const i of cp) { const x = i % W; for (const n of [x > 0 ? i - 1 : -1, x < W - 1 ? i + 1 : -1, i + dir * W]) { if (n < 0 || n >= N || own[n] >= 0) continue; let ok = true; nbs(n, z => { if (own[z] >= 0 && own[z] !== id) ok = false; }); if (ok) { add = n; break; } } if (add >= 0) break; } if (add < 0) break; own[add] = id; cp.push(add); } }); }); });
+  // 3) lỗ nền quá nhỏ bên trong chữ (≤ 2 ô) → lấp
+  { const seen = new Uint8Array(N); for (let i = 0; i < N; i++) { if (own[i] >= 0 || seen[i]) continue; const q = [i]; seen[i] = 1; let border = false; const nb = new Set(); for (let k = 0; k < q.length; k++) { const c = q[k], x = c % W, y = (c / W) | 0; if (x === 0 || y === 0 || x === W - 1 || y === H - 1) border = true; for (const n of [x > 0 ? c - 1 : -1, x < W - 1 ? c + 1 : -1, y > 0 ? c - W : -1, y < H - 1 ? c + W : -1]) { if (n < 0) continue; if (own[n] < 0) { if (!seen[n]) { seen[n] = 1; q.push(n); } } else nb.add(own[n]); } }
+    if (!border && q.length <= 2 && nb.size === 1) { const o = [...nb][0]; q.forEach(c => own[c] = o); } } }
+  // 4) lỗ trong chữ quá hẹp (không chứa nổi khối 2×2) → nới rộng nếu nét đủ dày, không thì lấp
+  for (let pass = 0; pass < 2; pass++) { const seen = new Uint8Array(N); for (let i = 0; i < N; i++) { if (own[i] >= 0 || seen[i]) continue; const q = [i]; seen[i] = 1; let border = false; const nb = new Set();
+    for (let k = 0; k < q.length; k++) { const c = q[k], x = c % W, y = (c / W) | 0; if (x === 0 || y === 0 || x === W - 1 || y === H - 1) border = true; for (const n of [x > 0 ? c - 1 : -1, x < W - 1 ? c + 1 : -1, y > 0 ? c - W : -1, y < H - 1 ? c + W : -1]) { if (n < 0) continue; if (own[n] < 0) { if (!seen[n]) { seen[n] = 1; q.push(n); } } else nb.add(own[n]); } }
+    if (border) continue; const set = new Set(q); const has22 = () => q.some(c => { const x = c % W; return x < W - 1 && set.has(c + 1) && set.has(c + W) && set.has(c + W + 1); });
+    if (has22()) continue;
+    if (pass === 0) { const run = (c, dx) => { let n = 0, x = c % W; let j = c; const o = own[c]; while (n < 6) { x += dx; j += dx; if (x < 0 || x >= W || own[j] !== o) break; n++; } return n; };
+      const add = []; q.forEach(c => { const x = c % W; const L = x > 0 && own[c - 1] >= 0 ? run(c - 1, -1) + 1 : 0, Rr = x < W - 1 && own[c + 1] >= 0 ? run(c + 1, 1) + 1 : 0; if (Rr >= 3 && Rr >= L) add.push(c + 1); else if (L >= 3) add.push(c - 1); });
+      add.forEach(c => { own[c] = -1; }); }
+    else { if (nb.size >= 1) { const o = [...nb][0]; q.forEach(c => own[c] = o); } } } }
+  for (let i = 0; i < N; i++) if (own[i] >= 0) mask[i] = chars[Math.floor(own[i] / P)].col;
+  return mask;
+}
+function loadImg(src) { return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; }); }
+function emojiCanvas(e) { const c = document.createElement('canvas'); c.width = c.height = 512; const x = c.getContext('2d'); x.textAlign = 'center'; x.textBaseline = 'middle'; x.font = '420px "Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif'; x.fillText(e, 256, 270); return c; }
+
+const SHAPES = {
+  heart: { n: 'Trái tim', k: 1, d: [['#E53935', 'M50 90 C20 68 5 52 5 32 C5 17 17 7 30 7 C40 7 47 13 50 21 C53 13 60 7 70 7 C83 7 95 17 95 32 C95 52 80 68 50 90 Z']] },
+  star: { n: 'Ngôi sao', k: 1, d: [['#F2C200', 'M50 4 L61.8 36 L95.6 36.4 L68.9 57.4 L78.7 90 L50 70.6 L21.3 90 L31.1 57.4 L4.4 36.4 L38.2 36 Z']] },
+  house: { n: 'Ngôi nhà', k: 2, d: [['#E53935', 'M6 50 L50 10 L94 50 Z'], ['#1E5BD6', 'M18 48 H82 V92 H18 Z'], ['#FFFFFF', 'M43 64 H59 V92 H43 Z M25 58 H37 V70 H25 Z M65 58 H77 V70 H65 Z']] },
+  tree: { n: 'Cái cây', k: 2, d: [['#8B5A2B', 'M42 58 H58 V94 H42 Z'], ['#2E9E44', 'M50 6 A30 30 0 1 1 49.9 6 Z M24 52 A18 18 0 1 1 23.9 52 Z M76 52 A18 18 0 1 1 75.9 52 Z']] },
+  fish: { n: 'Con cá', k: 1, d: [['#1E5BD6', 'M8 50 C20 26 52 22 70 50 C52 78 20 74 8 50 Z M66 50 L94 26 L90 50 L94 74 Z'], ['#FFFFFF', 'M24 43 A5 5 0 1 1 23.9 43 Z']] },
+  boat: { n: 'Thuyền buồm', k: 2, d: [['#E53935', 'M52 6 L52 62 L88 62 Z M46 20 L46 62 L16 62 Z'], ['#8B5A2B', 'M6 68 H94 L80 90 H20 Z']] },
+  sun: { n: 'Mặt trời', k: 1, d: [['#F57C00', 'M50 26 A24 24 0 1 1 49.9 26 Z M45 2 H55 V20 H45 Z M45 80 H55 V98 H45 Z M2 45 V55 H20 V45 Z M80 45 V55 H98 V45 Z M15 22 L22 15 L35 28 L28 35 Z M78 15 L85 22 L72 35 L65 28 Z M15 78 L28 65 L35 72 L22 85 Z M65 72 L72 65 L85 78 L78 85 Z']] },
+  apple: { n: 'Quả táo', k: 2, d: [['#E53935', 'M50 30 C30 18 8 30 10 54 C12 78 30 96 50 88 C70 96 88 78 90 54 C92 30 70 18 50 30 Z'], ['#2E9E44', 'M52 26 C54 10 66 4 80 6 C78 20 66 28 52 26 Z'], ['#8B5A2B', 'M46 30 L48 12 L54 12 L52 30 Z']] },
+  flower: { n: 'Bông hoa', k: 3, d: [['#2E9E44', 'M46 52 H54 V96 H46 Z M50 80 C36 64 20 66 14 74 C26 84 40 84 50 80 Z'], ['#E84393', 'M50 2 A14 14 0 1 1 49.9 2 Z M50 46 A14 14 0 1 1 49.9 46 Z M30 13 A14 14 0 1 1 29.9 13 Z M70 13 A14 14 0 1 1 69.9 13 Z M30 35 A14 14 0 1 1 29.9 35 Z M70 35 A14 14 0 1 1 69.9 35 Z'], ['#F2C200', 'M50 21 A11 11 0 1 1 49.9 21 Z']] },
+  smile: { n: 'Mặt cười', k: 1, d: [['#F57C00', 'M50 6 A44 44 0 1 1 49.9 6 Z'], ['#FFFFFF', 'M35 30 A7 7 0 1 1 34.9 30 Z M65 30 A7 7 0 1 1 64.9 30 Z M24 56 H36 C40 70 60 70 64 56 H76 C72 82 28 82 24 56 Z']] },
+  butterfly: { n: 'Con bướm', k: 2, d: [['#8E44AD', 'M48 48 C30 10 4 8 6 30 C8 46 28 52 48 50 Z M52 48 C70 10 96 8 94 30 C92 46 72 52 52 50 Z M48 54 C30 56 12 66 16 82 C22 94 40 80 48 58 Z M52 54 C70 56 88 66 84 82 C78 94 60 80 52 58 Z'], ['#2B2B2B', 'M45 28 H55 V84 H45 Z']] },
+  rocket: { n: 'Tên lửa', k: 3, d: [['#1E5BD6', 'M50 4 C66 18 68 42 64 72 H36 C32 42 34 18 50 4 Z'], ['#FFFFFF', 'M50 26 A8 8 0 1 1 49.9 26 Z'], ['#E53935', 'M36 52 L18 76 L36 72 Z M64 52 L82 76 L64 72 Z'], ['#F57C00', 'M40 74 H60 L50 96 Z']] },
+};
+function shapeCanvas(key) { const sh = SHAPES[key]; const c = document.createElement('canvas'); c.width = c.height = 500; const x = c.getContext('2d'); x.scale(5, 5); sh.d.forEach(([col, d]) => { x.fillStyle = col; x.fill(new Path2D(d)); }); return c; }
+let lastClusters = [];
+function svgDataUrl(svg) { return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg))); }
+async function getSource() { const p = st.pic;
+  if (p.imgSrc === 'upload') return p.image ? await loadImg(p.image) : null;
+  if (p.imgSrc === 'ai') return p.aiSvg ? await loadImg(svgDataUrl(p.aiSvg)) : null;
+  const e = p.emoji || 'shape:star'; return e.startsWith('shape:') && SHAPES[e.slice(6)] ? shapeCanvas(e.slice(6)) : emojiCanvas(e); }
+function procKey() { const p = st.pic; const src = p.imgSrc === 'upload' ? (p.image || '').length + (p.image || '').slice(-80) : p.imgSrc === 'ai' ? (p.aiSvg || '').length + (p.aiSvg || '').slice(-80) : p.emoji; return JSON.stringify([p.imgSrc, src, p.conv, p.bgRemove, p.bgTol, p.thr, p.thrAuto, p.k, p.invert, p.keepDetail, 'v2']); }
+function otsu(vals) { const h = new Float64Array(256); let n = 0; for (const v of vals) { h[Math.max(0, Math.min(255, v | 0))]++; n++; } if (!n) return 128; let sum = 0; for (let i = 0; i < 256; i++) sum += i * h[i]; let sB = 0, wB = 0, best = 0, th = 128; for (let i = 0; i < 256; i++) { wB += h[i]; if (!wB) continue; const wF = n - wB; if (!wF) break; sB += i * h[i]; const mB = sB / wB, mF = (sum - sB) / wF; const v = wB * wF * (mB - mF) ** 2; if (v > best) { best = v; th = i; } } return th; }
+const procCache = { key: '', data: null };
+async function processImage() {
+  const key = procKey(); if (procCache.key === key) return procCache.data;
+  const src = await getSource(); if (!src) { procCache.key = key; procCache.data = null; return null; }
+  const p = st.pic; const sw = src.naturalWidth || src.width, sh = src.naturalHeight || src.height; const sc = Math.min(1, 380 / Math.max(sw, sh)); const w = Math.max(1, Math.round(sw * sc)), h = Math.max(1, Math.round(sh * sc));
+  const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(src, 0, 0, w, h); const d = x.getImageData(0, 0, w, h).data; const N = w * h;
+  const R = new Float32Array(N), Gr = new Float32Array(N), B = new Float32Array(N), A = new Float32Array(N), gray = new Float32Array(N);
+  for (let i = 0; i < N; i++) { const a = d[i * 4 + 3] / 255; A[i] = a; R[i] = d[i * 4] * a + 255 * (1 - a); Gr[i] = d[i * 4 + 1] * a + 255 * (1 - a); B[i] = d[i * 4 + 2] * a + 255 * (1 - a); gray[i] = 0.299 * R[i] + 0.587 * Gr[i] + 0.114 * B[i]; }
+  { const t = new Float32Array(N); for (let y = 0; y < h; y++) for (let xx = 0; xx < w; xx++) { let s2 = 0, n = 0; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const X = xx + dx, Y = y + dy; if (X >= 0 && Y >= 0 && X < w && Y < h) { s2 += gray[Y * w + X]; n++; } } t[y * w + xx] = s2 / n; } gray.set(t); }
+  const bg = new Uint8Array(N); let hasAlpha = false; for (let i = 0; i < N; i++) if (A[i] < 0.2) { bg[i] = 1; hasAlpha = true; }
+  if (p.bgRemove) { // màu nền = trung vị viền ảnh, loang từ viền vào
+    const bord = []; for (let i = 0; i < w; i++) bord.push(i, (h - 1) * w + i); for (let j = 0; j < h; j++) bord.push(j * w, j * w + w - 1);
+    const med = arr => { const a = arr.slice().sort((m, n) => m - n); return a[a.length >> 1]; }; const op = bord.filter(i => !bg[i]);
+    if (op.length) { const mr = med(op.map(i => R[i])), mg = med(op.map(i => Gr[i])), mb = med(op.map(i => B[i])); const tol = p.bgTol;
+      const near = i => Math.hypot(R[i] - mr, Gr[i] - mg, B[i] - mb) < tol; const q = []; bord.forEach(i => { if (!bg[i] && near(i)) { bg[i] = 1; q.push(i); } });
+      for (let k = 0; k < q.length; k++) { const i = q[k], xx = i % w, yy = (i / w) | 0; for (const n of [xx > 0 ? i - 1 : -1, xx < w - 1 ? i + 1 : -1, yy > 0 ? i - w : -1, yy < h - 1 ? i + w : -1]) if (n >= 0 && !bg[n] && near(n)) { bg[n] = 1; q.push(n); } } } }
+  const lab = new Int8Array(N).fill(-1); let classes = 1; const conv = p.conv;
+  const fgVals = []; for (let i = 0; i < N; i++) if (!bg[i]) fgVals.push(gray[i]);
+  if (conv === 'silhouette') { if (p.bgRemove || hasAlpha) { for (let i = 0; i < N; i++) if (!bg[i] && !(p.invert && gray[i] < 128)) lab[i] = 0;
+      // giữ chi tiết bên trong (mắt, miệng, hoa văn) thành lỗ trắng nếu tương phản rõ
+      if (p.keepDetail !== false && fgVals.length > 50) { const T = otsu(fgVals); let d0 = 0, n0 = 0, d1 = 0, n1 = 0; fgVals.forEach(v => { if (v < T) { d0 += v; n0++; } else { d1 += v; n1++; } }); const minority = Math.min(n0, n1) / fgVals.length;
+        if (n0 && n1 && d1 / n1 - d0 / n0 > 55 && minority < 0.3) { const darkMin = n0 < n1; for (let i = 0; i < N; i++) if (lab[i] === 0 && (darkMin ? gray[i] < T : gray[i] >= T)) { const x = i % w, y = (i / w) | 0; let edge = false; for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const X = x + dx, Y = y + dy; if (X < 0 || Y < 0 || X >= w || Y >= h || bg[Y * w + X]) { edge = true; break; } } if (!edge) lab[i] = -1; } } } } else { const T = otsu(fgVals); for (let i = 0; i < N; i++) if (gray[i] < T) lab[i] = 0; } }
+  else if (conv === 'bw') { const T = p.thrAuto ? otsu(Array.from(gray)) : p.thr * 255; if (p.thrAuto) st.pic._autoThr = T / 255; for (let i = 0; i < N; i++) if (!bg[i] && (p.invert ? gray[i] > T : gray[i] < T)) lab[i] = 0; }
+  else if (conv === 'edge') { const bl = new Float32Array(N); for (let y = 0; y < h; y++) for (let xx = 0; xx < w; xx++) { let s2 = 0, n = 0; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { const X = xx + dx, Y = y + dy; if (X >= 0 && Y >= 0 && X < w && Y < h) { s2 += gray[Y * w + X]; n++; } } bl[y * w + xx] = s2 / n; }
+    const mag = new Float32Array(N); for (let y = 1; y < h - 1; y++) for (let xx = 1; xx < w - 1; xx++) { const i = y * w + xx; const gx = bl[i - w + 1] + 2 * bl[i + 1] + bl[i + w + 1] - bl[i - w - 1] - 2 * bl[i - 1] - bl[i + w - 1]; const gy = bl[i + w - 1] + 2 * bl[i + w] + bl[i + w + 1] - bl[i - w - 1] - 2 * bl[i - w] - bl[i - w + 1]; mag[i] = Math.hypot(gx, gy); }
+    const sorted = Array.from(mag).filter(v => v > 0).sort((m, n) => m - n); const p95 = sorted.length ? sorted[Math.floor(sorted.length * 0.95)] || 1 : 1; const T = (1 - p.thr) * p95;
+    for (let i = 0; i < N; i++) { const xx = i % w, y = (i / w) | 0; const edgeBg = !bg[i] && ((xx > 0 && bg[i - 1]) || (xx < w - 1 && bg[i + 1]) || (y > 0 && bg[i - w]) || (y < h - 1 && bg[i + w])); if ((!bg[i] && mag[i] > T) || edgeBg) lab[i] = 0; } }
+  else if (conv === 'levels') { const k = Math.max(2, Math.min(8, p.k)); const useAll = !(p.bgRemove || hasAlpha); const T0 = useAll ? otsu(Array.from(gray)) + 30 : 256;
+    const idx = []; for (let i = 0; i < N; i++) if (!bg[i] && gray[i] < T0) idx.push(i);
+    const vals = idx.map(i => p.invert ? 255 - gray[i] : gray[i]); const sv = vals.slice().sort((m, n) => m - n); let cent = []; for (let j = 0; j < k; j++) cent.push(sv[Math.floor((j + 0.5) / k * sv.length)] || 0);
+    for (let it = 0; it < 12; it++) { const sum = cent.map(() => 0), cn = cent.map(() => 0); vals.forEach(v => { let bi = 0; cent.forEach((c, ci) => { if (Math.abs(c - v) < Math.abs(cent[bi] - v)) bi = ci; }); sum[bi] += v; cn[bi]++; }); cent = cent.map((c, ci) => cn[ci] ? sum[ci] / cn[ci] : c); }
+    cent.sort((m, n) => m - n); const gapMin = k <= 3 ? 28 : k <= 5 ? 16 : 9; const merged = []; cent.forEach(c => { if (!merged.length || c - merged[merged.length - 1] > gapMin) merged.push(c); }); classes = merged.length;
+    idx.forEach((i, j) => { const v = vals[j]; let bi = 0; merged.forEach((c, ci) => { if (Math.abs(c - v) < Math.abs(merged[bi] - v)) bi = ci; }); lab[i] = bi; }); }
+  else { const T = p.thr * 255; const idx = []; const pts = []; for (let i = 0; i < N; i++) { const m = Math.min(R[i], Gr[i], B[i]); if (!bg[i] && (p.invert ? m > T : m < T)) { idx.push(i); } }
+    // biểu đồ màu (lượng tử 5 bit) → k-means có trọng số, khởi tạo theo tần suất để bỏ qua viền nhiễu
+    const bins = new Map(); idx.forEach(i => { const key = ((R[i] >> 3) << 10) | ((Gr[i] >> 3) << 5) | (B[i] >> 3); let e = bins.get(key); if (!e) { e = [0, 0, 0, 0]; bins.set(key, e); } e[0] += R[i]; e[1] += Gr[i]; e[2] += B[i]; e[3]++; });
+    const bl = [...bins.values()].map(e => [e[0] / e[3], e[1] / e[3], e[2] / e[3], e[3]]); const k = Math.min(p.k, bl.length || 1); classes = k;
+    if (bl.length) { const dist = (a2, b2) => (a2[0] - b2[0]) ** 2 * 0.3 + (a2[1] - b2[1]) ** 2 * 0.59 + (a2[2] - b2[2]) ** 2 * 0.11 + 1;
+      let cent = [bl.reduce((m, e) => e[3] > m[3] ? e : m, bl[0]).slice(0, 3)];
+      while (cent.length < k) { let bi = null, bv = -1; bl.forEach(e => { const v = e[3] * Math.min(...cent.map(c => dist(c, e))); if (v > bv) { bv = v; bi = e; } }); cent.push(bi.slice(0, 3)); }
+      for (let it = 0; it < 25; it++) { const acc = cent.map(() => [0, 0, 0, 0]); bl.forEach(e => { let ci = 0, cd = Infinity; cent.forEach((c, j) => { const dd = dist(c, e); if (dd < cd) { cd = dd; ci = j; } }); const A2 = acc[ci]; A2[0] += e[0] * e[3]; A2[1] += e[1] * e[3]; A2[2] += e[2] * e[3]; A2[3] += e[3]; }); cent = cent.map((c, j) => acc[j][3] ? [acc[j][0] / acc[j][3], acc[j][1] / acc[j][3], acc[j][2] / acc[j][3]] : c); }
+      idx.forEach(i => { let b2 = 0, bd = Infinity; const px = [R[i], Gr[i], B[i]]; cent.forEach((cc, ci) => { const dd = dist(cc, px); if (dd < bd) { bd = dd; b2 = ci; } }); lab[i] = b2; }); } }
+  const rgb = []; const cnt = []; for (let k2 = 0; k2 < classes; k2++) { rgb.push([0, 0, 0]); cnt.push(0); } for (let i = 0; i < N; i++) { const l = lab[i]; if (l >= 0) { rgb[l][0] += R[i]; rgb[l][1] += Gr[i]; rgb[l][2] += B[i]; cnt[l]++; } } rgb.forEach((v, k2) => { if (cnt[k2]) v.forEach((_, j) => v[j] /= cnt[k2]); });
+  const data = { w, h, lab, classes, rgb, cnt, src: c };
+  procCache.key = key; procCache.data = data; return data;
+}
+function distinctPal(rgbs) { // gán mỗi vùng màu một màu bảng khác nhau (gần nhất trước)
+  const pairs = []; rgbs.forEach((c, i) => E.DEFAULT_PAL.forEach((p, j) => { const n = parseInt(p.hex.slice(1), 16); pairs.push([(c[0] - (n >> 16)) ** 2 * 0.3 + (c[1] - ((n >> 8) & 255)) ** 2 * 0.59 + (c[2] - (n & 255)) ** 2 * 0.11, i, j]); }));
+  pairs.sort((a, b) => a[0] - b[0]); const out = new Array(rgbs.length).fill(-1), used = new Set(); for (const [, i, j] of pairs) { if (out[i] < 0 && !used.has(j)) { out[i] = j; used.add(j); } } return out.map((v, i) => v < 0 ? nearestPal(rgbs[i]) : v); }
+function classPal(data) { const p = st.pic; const LV = [9, 7, 1, 4, 0, 2, 3, 5]; const auto = p.conv === 'color' ? distinctPal(data.rgb) : null; return data.rgb.map((c, i) => p.clusterMap[i] != null ? p.clusterMap[i] : p.conv === 'color' ? auto[i] : p.conv === 'levels' ? LV[i % LV.length] : 9); }
+async function imageMask(W, H) {
+  const mask = new Int16Array(W * H).fill(-1); const icov = new Float32Array(W * H); imageMask.cov = icov; const data = await processImage(); lastProc = data;
+  if (!data) { lastClusters = []; return mask; }
+  const { w, h, lab } = data; let x0 = w, y0 = h, x1 = -1, y1 = -1; for (let i = 0; i < w * h; i++) if (lab[i] >= 0) { const xx = i % w, yy = (i / w) | 0; if (xx < x0) x0 = xx; if (xx > x1) x1 = xx; if (yy < y0) y0 = yy; if (yy > y1) y1 = yy; }
+  const pals = classPal(data); lastClusters = data.rgb.map((c, i) => ({ rgb: c, pal: pals[i], count: data.cnt[i] })).filter(c => c.count > 0 || true);
+  if (x1 < 0) return mask;
+  const bw = x1 - x0 + 1, bh = y1 - y0 + 1, m = 1.4; const s = Math.min((W - 2 * m) / bw, (H - 2 * m) / bh); const ox = (W - bw * s) / 2, oy = (H - bh * s) / 2;
+  const th = st.pic.imgThick; const covT = [0.5, 0.3, 0.16, 0.1][th] || 0.5; const counts = new Float32Array(data.classes);
+  for (let gy = 0; gy < H; gy++) for (let gx = 0; gx < W; gx++) { const px0 = x0 + (gx - ox) / s, px1 = x0 + (gx + 1 - ox) / s, py0 = y0 + (gy - oy) / s, py1 = y0 + (gy + 1 - oy) / s; if (px1 < x0 || py1 < y0 || px0 > x1 + 1 || py0 > y1 + 1) continue;
+    counts.fill(0); let tot = 0, fg = 0; const ns = 6; for (let a = 0; a < ns; a++) for (let b2 = 0; b2 < ns; b2++) { const X = Math.floor(px0 + (px1 - px0) * (a + 0.5) / ns), Y = Math.floor(py0 + (py1 - py0) * (b2 + 0.5) / ns); tot++; if (X < 0 || Y < 0 || X >= w || Y >= h) continue; const l = lab[Y * w + X]; if (l >= 0) { counts[l]++; fg++; } }
+    if (tot) icov[gy * W + gx] = fg / tot; if (tot && fg / tot >= covT) { let bc = 0; for (let k = 1; k < counts.length; k++) if (counts[k] > counts[bc]) bc = k; mask[gy * W + gx] = pals[bc]; } }
+  if (th >= 3) { const cp = Int16Array.from(mask); for (let i = 0; i < W * H; i++) { if (cp[i] >= 0) continue; const xx = i % W, yy = (i / W) | 0; const nb = [xx > 0 ? cp[i - 1] : -1, xx < W - 1 ? cp[i + 1] : -1, yy > 0 ? cp[i - W] : -1, yy < H - 1 ? cp[i + W] : -1].filter(v => v >= 0); if (nb.length) mask[i] = nb[0]; } }
+  return cleanMask(smoothImageMask(mask, W, H), W, H, 4);
+}
+let lastProc = null;
+function drawBW() { const o = $('#bwOrig'), pv = $('#bwPrev'); const d = lastProc; if (!d) { [o, pv].forEach(c => { c.width = 10; c.height = 10; c.getContext('2d').clearRect(0, 0, 10, 10); }); return; }
+  o.width = d.w; o.height = d.h; const ox = o.getContext('2d'); ox.fillStyle = '#fff'; ox.fillRect(0, 0, d.w, d.h); ox.drawImage(d.src, 0, 0);
+  pv.width = d.w; pv.height = d.h; const px = pv.getContext('2d'); const im = px.createImageData(d.w, d.h); const pals = classPal(d).map(i => { const n = parseInt(PALETTE[i].hex.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; });
+  for (let i = 0; i < d.w * d.h; i++) { const l = d.lab[i]; const c = l >= 0 ? pals[l] : [255, 255, 255]; im.data[i * 4] = c[0]; im.data[i * 4 + 1] = c[1]; im.data[i * 4 + 2] = c[2]; im.data[i * 4 + 3] = 255; } px.putImageData(im, 0, 0); }
+// làm mịn mép hình + giữ chi tiết nhỏ (mắt, khe hở) đủ lớn để nhìn rõ
+function smoothImageMask(mask, W, H) { const N = W * H; const at = (x, y) => (x < 0 || y < 0 || x >= W || y >= H) ? -1 : mask[y * W + x];
+  // 1) lỗ nhỏ khép kín (1–3 ô) → nới thành khối 2×2 để còn thấy được
+  const seen = new Uint8Array(N);
+  for (let i = 0; i < N; i++) { if (mask[i] >= 0 || seen[i]) continue; const q = [i]; seen[i] = 1; let border = false;
+    for (let k = 0; k < q.length; k++) { const c = q[k], x = c % W, y = (c / W) | 0; if (x === 0 || y === 0 || x === W - 1 || y === H - 1) border = true; for (const n of [x > 0 ? c - 1 : -1, x < W - 1 ? c + 1 : -1, y > 0 ? c - W : -1, y < H - 1 ? c + W : -1]) if (n >= 0 && mask[n] < 0 && !seen[n]) { seen[n] = 1; q.push(n); } }
+    if (border || q.length > 3) continue; let best = null, bs = -1;
+    for (const c of q) { const x = c % W, y = (c / W) | 0; for (const [ox, oy] of [[0, 0], [-1, 0], [0, -1], [-1, -1]]) { const X = x + ox, Y = y + oy; if (X < 1 || Y < 1 || X + 1 >= W - 1 || Y + 1 >= H - 1) continue; const blk = [Y * W + X, Y * W + X + 1, (Y + 1) * W + X, (Y + 1) * W + X + 1]; const sc = blk.filter(b => q.includes(b)).length; if (sc > bs) { bs = sc; best = blk; } } }
+    if (best) best.forEach(b => { mask[b] = -1; seen[b] = 1; }); }
+  // 2) gai nhọn 1 ô và khấc lõm 1 ô ở mép → làm phẳng
+  for (let pass = 0; pass < (st.pic.conv === 'edge' ? 0 : 2); pass++) { const cp = Int16Array.from(mask);
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) { const i = y * W + x, v = cp[i]; const n4 = [x > 0 ? cp[i - 1] : -2, x < W - 1 ? cp[i + 1] : -2, y > 0 ? cp[i - W] : -2, y < H - 1 ? cp[i + W] : -2];
+      const cnt = {}; n4.forEach(z => { if (z !== -2) cnt[z] = (cnt[z] || 0) + 1; }); const same = cnt[v] || 0;
+      if (v >= 0 && same <= 1) { let b = -1, bv = 0; for (const k in cnt) if (+k !== v && cnt[k] > bv) { bv = cnt[k]; b = +k; } if (bv >= 2) mask[i] = b; }
+      else if (same <= 1) { for (const k in cnt) if (+k !== v && cnt[k] === 3) { mask[i] = +k; break; } } } }
+  return mask; }
+function cleanMask(mask, W, H, minSize) { const seen = new Uint8Array(W * H);
+  for (let i = 0; i < W * H; i++) { if (seen[i]) continue; const v = mask[i]; const cells = [i]; seen[i] = 1; const nb = {};
+    for (let h = 0; h < cells.length; h++) { const c = cells[h], x = c % W, y = (c / W) | 0; for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = x + dx, ny = y + dy; if (nx < 0 || ny < 0 || nx >= W || ny >= H) continue; const n = ny * W + nx; if (mask[n] === v) { if (!seen[n]) { seen[n] = 1; cells.push(n); } } else nb[mask[n]] = (nb[mask[n]] || 0) + 1; } }
+    if (cells.length < minSize) { let b = null, bv = -1; for (const k in nb) if (nb[k] > bv) { bv = nb[k]; b = +k; } if (b !== null) cells.forEach(c => mask[c] = b); } }
+  return mask; }
+function kmeans(pts, k) { const r = E.rng(11); const cent = [pts[Math.floor(r() * pts.length)].slice()];
+  while (cent.length < k) { let bi = 0, bd = -1; pts.forEach((p, i) => { const d = Math.min(...cent.map(c => (c[0] - p[0]) ** 2 + (c[1] - p[1]) ** 2 + (c[2] - p[2]) ** 2)); if (d > bd) { bd = d; bi = i; } }); cent.push(pts[bi].slice()); }
+  let asg = new Array(pts.length).fill(0);
+  for (let it = 0; it < 15; it++) { asg = pts.map(p => { let b = 0, bd = Infinity; cent.forEach((c, i) => { const d = (c[0] - p[0]) ** 2 + (c[1] - p[1]) ** 2 + (c[2] - p[2]) ** 2; if (d < bd) { bd = d; b = i; } }); return b; });
+    cent.forEach((c, i) => { let n = 0, s = [0, 0, 0]; pts.forEach((p, j) => { if (asg[j] === i) { n++; s[0] += p[0]; s[1] += p[1]; s[2] += p[2]; } }); if (n) cent[i] = s.map(v => v / n); }); }
+  return { cent, asg }; }
+function nearestPal(c) { let b = 0, bd = Infinity; E.DEFAULT_PAL.forEach((p, i) => { const n = parseInt(p.hex.slice(1), 16); const d = (c[0] - (n >> 16)) ** 2 * 0.3 + (c[1] - ((n >> 8) & 255)) ** 2 * 0.59 + (c[2] - (n & 255)) ** 2 * 0.11; if (d < bd) { bd = d; b = i; } }); return b; }
+
+/* ============ CÔNG THỨC TOÁN (MathJax) ============ */
+const mathCache = new Map(); let mjP = null;
+function loadMathJax() { if (!mjP) { window.MathJax = { loader: { load: [] }, tex: { packages: { '[+]': ['mhchem'] } }, svg: { fontCache: 'none' }, options: { enableMenu: false }, startup: { typeset: false } }; mjP = loadScript('tex-svg-full.js').then(() => MathJax.startup.promise); } return mjP; }
+function texToInfo(tex) { const node = MathJax.tex2svg(tex, { display: false }); const svg = node.querySelector('svg'); const vb = svg.getAttribute('viewBox').split(/\s+/).map(Number); return { vb: vb.join(' '), inner: svg.innerHTML, w: vb[2] / 1000, asc: -vb[1] / 1000, desc: (vb[3] + vb[1]) / 1000, err: !!svg.querySelector('[data-mml-node="merror"]') }; }
+E.setMathInfo(tex => mathCache.get(tex) || null);
+function allTex() { const out = new Set(); st.questions.forEach(q => [q.text, q.explain, ...q.options].forEach(t => E.mathList(t).forEach(x => out.add(x)))); return [...out]; }
+let mathLoading = false;
+function ensureMath() { const miss = allTex().filter(t => !mathCache.has(t)); if (!miss.length || mathLoading) return false; mathLoading = true;
+  loadMathJax().then(() => { miss.forEach(t => { try { mathCache.set(t, texToInfo(t)); } catch (e) { console.warn(e); } }); mathLoading = false; render(); }).catch(e => { mathLoading = false; console.warn(e); }); return true; }
+async function mathPngs(pages) { const items = E.collectMath(pages); const map = new Map();
+  for (const it of items) { const pxW = Math.max(4, Math.round(it.w / 25.4 * 500)), pxH = Math.max(4, Math.round(it.h / 25.4 * 500)); const im = await loadImg(svgDataUrl(E.mathSvgString(it.mi, it.color, pxW, pxH))); const c = document.createElement('canvas'); c.width = pxW; c.height = pxH; c.getContext('2d').drawImage(im, 0, 0, pxW, pxH); map.set(it.tex + '|' + it.color, c.toDataURL('image/png')); }
+  E.setMathPng((tex, color) => map.get(tex + '|' + color)); }
+function mathHTML(text) { const wrap = document.createElement('span'); E.splitMath(text).forEach(p => { if (p.m != null) { try { const n = MathJax.tex2svg(p.m.trim(), { display: false }); n.querySelectorAll('mjx-assistive-mml').forEach(x => x.remove()); wrap.appendChild(n); } catch (e) { wrap.appendChild(document.createTextNode('$' + p.m + '$')); } } else wrap.appendChild(document.createTextNode(p.t)); }); return wrap; }
+function updatePreview(card) { const i = +card.dataset.i, q = st.questions[i]; const box = card.querySelector('.qprev'); if (!q || !box) return; const has = [q.text, q.explain, ...q.options].some(t => /\$[^$]+\$|\\\(/.test(t || ''));
+  if (!has) { box.style.display = 'none'; return; } box.style.display = ''; loadMathJax().then(() => { box.innerHTML = '<div class="small" style="font-family:inherit;margin-bottom:2px">Xem trước công thức:</div>'; const d = document.createElement('div'); d.appendChild(mathHTML(q.text)); box.appendChild(d);
+    const o = document.createElement('div'); q.options.forEach((t, k) => { const sp = document.createElement('span'); sp.className = 'po'; sp.appendChild(document.createTextNode(LET[k] + '. ')); sp.appendChild(mathHTML(t)); o.appendChild(sp); }); box.appendChild(o);
+    if (q.explain) { const e2 = document.createElement('div'); e2.style.color = '#555'; e2.style.fontSize = '13px'; e2.appendChild(mathHTML(q.explain)); box.appendChild(e2); } }); }
+const MATHBTN = [['a/b', '$\\frac{a}{b}$', 'Phân số'], ['x²', '$x^{2}$', 'Lũy thừa'], ['xₙ', '$x_{n}$', 'Chỉ số dưới'], ['√', '$\\sqrt{x}$', 'Căn bậc hai'], ['ⁿ√', '$\\sqrt[3]{x}$', 'Căn bậc n'], ['×', '$\\times$'], ['÷', '$\\div$'], ['·', '$\\cdot$'], ['±', '$\\pm$'], ['≠', '$\\neq$'], ['≤', '$\\le$'], ['≥', '$\\ge$'], ['≈', '$\\approx$'], ['π', '$\\pi$'], ['α', '$\\alpha$'], ['Δ', '$\\Delta$'], ['°', '$30^{\\circ}$', 'Độ / góc'], ['∠', '$\\widehat{ABC}$', 'Góc'], ['→v', '$\\vec{F}$', 'Vectơ'], ['|x|', '$\\left| x \\right|$', 'Giá trị tuyệt đối'], ['{hệ', '$\\begin{cases} x+y=5 \\\\ x-y=1 \\end{cases}$', 'Hệ phương trình'], ['∑', '$\\sum_{i=1}^{n} i$'], ['∫', '$\\int_{a}^{b} f(x)\\,dx$'], ['lim', '$\\lim_{x \\to 0}$'], ['log', '$\\log_{2} 8$'], ['sin', '$\\sin x$'], ['∈', '$\\in$'], ['ℝ', '$\\mathbb{R}$'], ['m/s²', '$\\text{m/s}^{2}$', 'Đơn vị'], ['H₂O', '$\\ce{H2O}$', 'Công thức hóa học'], ['→ PƯ', '$\\ce{2H2 + O2 ->[t^\\circ] 2H2O}$', 'Phương trình hóa học'], ['ion', '$\\ce{SO4^2-}$', 'Ion']];
+let lastField = null;
+function initMathBar() { $('#mathBar').innerHTML = MATHBTN.map(([l, t, tip], i) => `<button data-mi="${i}" title="${escH(tip || t)}">${escH(l)}</button>`).join('');
+  $('#mathBar').addEventListener('mousedown', e => e.preventDefault());
+  $('#mathBar').onclick = e => { const b = e.target.closest('[data-mi]'); if (!b) return; const f = lastField && document.body.contains(lastField) ? lastField : null; if (!f) { toast('Bấm vào ô câu hỏi hoặc phương án trước, rồi bấm nút công thức.'); return; } const t = MATHBTN[+b.dataset.mi][1]; const a = f.selectionStart ?? f.value.length, z = f.selectionEnd ?? a; f.value = f.value.slice(0, a) + t + f.value.slice(z); f.focus(); f.setSelectionRange(a + t.length, a + t.length); f.dispatchEvent(new Event('input', { bubbles: true })); }; }
+document.addEventListener('focusin', e => { if (e.target.matches && e.target.matches('#qList textarea, #qList input[type=text]')) lastField = e.target; });
+
+/* ============ TÍNH TOÁN ============ */
+let cur = { mask: null, src: null, W: 0, H: 0, part: null, srcKey: '' };
+function srcKey(W, H) { const p = st.pic; const t = [p.text, p.case, p.wordColors, p.font, p.fit, p.stretch, p.thick, p.spacing, p.autoWrap, p.lineGap, 'v5']; return JSON.stringify([W, H, p.mode, p.mode !== 'image' ? t : 0, p.mode !== 'text' ? [procKey(), p.imgThick, p.clusterMap] : 0, p.mode === 'combo' ? [p.comboOrder, p.comboRatio] : 0]); }
+let busy = false, again = false, picChanged = false;
+async function buildSourceMask(W, H) { const p = st.pic;
+  if (p.mode === 'text') { lastProc = null; const m = await textMask(W, H); cur.cov = textMask.cov; return m; }
+  if (p.mode === 'image') { const m = await imageMask(W, H); cur.cov = imageMask.cov; return m; }
+  const H1 = Math.max(6, Math.min(H - 6, Math.round(H * p.comboRatio))), H2 = H - H1; const im = await imageMask(W, H1), tx = await textMask(W, H2); const out = new Int16Array(W * H);
+  const cv = new Float32Array(W * H); const ci = imageMask.cov, ct = textMask.cov; if (p.comboOrder === 'text') { out.set(tx, 0); out.set(im, W * H2); cv.set(ct, 0); cv.set(ci, W * H2); } else { out.set(im, 0); out.set(tx, W * H1); cv.set(ci, 0); cv.set(ct, W * H1); } cur.cov = cv; return out; }
+function fidelity(mask, cov) { if (!cov || !mask) return null; let s = 0, d = 0; for (let i = 0; i < mask.length; i++) { const m = mask[i] >= 0 ? 1 : 0; s += cov[i]; d += Math.abs(cov[i] - m); } return s > 0 ? Math.max(0, 1 - d / s) : null; }
+function strokeWidth(mask, W, H) { // độ dày nét trung vị (ô)
+  const runs = []; for (let y = 0; y < H; y++) { let r = 0; for (let x = 0; x <= W; x++) { if (x < W && mask[y * W + x] >= 0) r++; else { if (r) runs.push(r); r = 0; } } } for (let x = 0; x < W; x++) { let r = 0; for (let y = 0; y <= H; y++) { if (y < H && mask[y * W + x] >= 0) r++; else { if (r) runs.push(r); r = 0; } } } if (!runs.length) return 0; runs.sort((a, b) => a - b); return runs[Math.floor(runs.length * 0.3)]; }
+function buildPart(mask, W, H) { const need = {}; st.questions.forEach(q => { if (q.correct >= 0) need[q.color] = (need[q.color] || 0) + 1; });
+  const part = E.partition(mask, W, H, { seed: st.pic.seed, bgSize: st.pic.bgSize, fgSize: st.pic.fgSize, need, minBg: 6, minFg: 7 });
+  E.assignCodes(part, st.questions, E.rng(st.pic.seed * 31 + 5));
+  const PG = E.pageGeom(st.meta.orientation, st.meta.paper), geo = PG.pic; const cell = Math.min(geo.w / W, geo.h / H); const LBL = Math.round(st.pic.labSize * PG.f * 2) / 2;
+  const lab = () => E.placeLabels(part, cell, LBL, Math.min(5, LBL), (t, pt) => E.textW(t, 'sans', true, pt)); lab();
+  for (let it = 0; it < 3; it++) { if (!E.mergeTight(part)) break; E.assignCodes(part, st.questions, E.rng(st.pic.seed * 31 + 5)); lab(); }
+  return { part, cell }; }
+async function recompute() {
+  if (busy) { again = true; return; } busy = true;
+  try {
+    checkRotate(); E.applyPalette(st.palette); const { W, H } = E.gridDims(st.meta.orientation, st.pic.cols, st.meta.paper);
+    const key = srcKey(W, H);
+    if (key !== cur.srcKey || !cur.src) { cur.src = await buildSourceMask(W, H); cur.srcKey = key; }
+    cur.W = W; cur.H = H;
+    let mask = cur.src;
+    if (st.maskEdit && st.maskEdit.key === key && st.maskEdit.data.length === W * H) mask = Int16Array.from(st.maskEdit.data); else if (st.maskEdit && st.maskEdit.key !== key) st.maskEdit = null;
+    cur.mask = mask; cur.fid = fidelity(mask, cur.cov); cur.sw = strokeWidth(mask, W, H);
+    const present = presentColors(mask);
+    const mism = st.questions.length && (Object.keys(present).some(c => !st.questions.some(q => q.color === +c)) || st.questions.some(q => !present[q.color]));
+    if (st.autoColor || (picChanged && mism)) { autoAssign(present); if (!st.autoColor) { st.autoColor = true; } renderQList(); }
+    picChanged = false;
+    const { part } = buildPart(mask, W, H);
+    cur.part = part; cur.present = present;
+    render();
+  } catch (e) { console.error(e); $('#status').textContent = 'Lỗi: ' + e.message; }
+  busy = false; if (again) { again = false; recompute(); }
+}
+const recomputeSoon = (() => { let t; return () => { clearTimeout(t); t = setTimeout(recompute, 220); }; })();
+function presentColors(mask) { const c = {}; for (const v of mask) if (v >= 0) c[v] = (c[v] || 0) + 1; return c; }
+function autoAssign(present) {
+  const cols = Object.keys(present).map(Number).sort((a, b) => present[b] - present[a]); const n = st.questions.length; if (!cols.length || !n) return;
+  const cnt = {}; cols.forEach(c => cnt[c] = 0);
+  if (n >= cols.length) { cols.forEach(c => cnt[c] = 1); const tot = cols.reduce((a, c) => a + present[c], 0); let rest = n - cols.length; const want = cols.map(c => ({ c, v: rest * present[c] / tot })); want.forEach(w => { const f = Math.floor(w.v); cnt[w.c] += f; rest -= f; w.fr = w.v - f; }); want.sort((a, b) => b.fr - a.fr); for (let i = 0; i < rest; i++) cnt[want[i % want.length].c]++; }
+  else cols.slice(0, n).forEach(c => cnt[c] = 1);
+  const slots = []; cols.forEach(c => { for (let i = 0; i < cnt[c]; i++) slots.push(c); });
+  E.shuffle(slots, E.rng(st.questions.length * 13 + 3)); st.questions.forEach((q, i) => q.color = slots[i] != null ? slots[i] : cols[0]);
+}
+
+/* ============ HIỂN THỊ ============ */
+function currentPics() { const p = st.meta.pictureName; if (p) return p; if (st.pic.mode !== 'image') return caseOf(st.pic.text).replace(/\s+/g, ' ').trim(); return ''; }
+function docState() { return { meta: Object.assign({}, st.meta, { pictureName: currentPics() }), questions: st.questions, _colors: Object.keys(cur.present || {}).map(Number) }; }
+function render() {
+  const part = cur.part; if (!part) return; ensureMath();
+  const ds = docState();
+  const views = st.view === 'both' ? ['student', 'answer'].concat(st.meta.includeGuide !== false ? ['guide'] : []) : [st.view];
+  let html = '';
+  for (const v of views) { const pages = v === 'guide' ? E.guideDoc(ds) : E.layoutDoc(ds, v === 'answer'); pages.forEach((pg, i) => { html += `<div class="plabel">${v === 'answer' ? 'Đáp án' : v === 'guide' ? 'Hướng dẫn giáo viên' : 'Phiếu học sinh'} – trang ${i + 1}/${pages.length}</div><div class="pagewrap ${st.meta.orientation}">${E.svgPage(pg, part)}</div>`; }); }
+  $('#pages').innerHTML = html;
+  const fg = part.regions.filter(g => g.cls >= 0).length;
+  const tight = part.regions.filter(g => g.lab && !g.lab.fit).length; const tiny = part.regions.filter(g => g.cells.length < 3).length;
+  const fidP = cur.fid != null ? Math.round(cur.fid * 100) : null; const fidTxt = fidP == null ? '' : `<span style="color:${fidP >= 88 ? '#1d6b33' : fidP >= 78 ? '#b26a00' : '#b42318'};font-weight:700">Độ khớp hình ${fidP}%</span> · `; $('#fidInfo') && ($('#fidInfo').innerHTML = fidP == null ? '' : `Độ khớp với chữ/hình gốc: <b>${fidP}%</b>${fidP < 88 ? ' – nên bấm “Tự tối ưu độ mịn” hoặc tăng độ mịn lưới.' : ' – tốt.'}`);
+  $('#status').innerHTML = fidTxt + `${part.regions.length} mảnh (${fg} mảnh tô màu) · lưới ${part.W}×${part.H} · ` + (tight || tiny ? `<span style="color:#b26a00">⚠ ${tight} mảnh hơi chật cho mã${tiny ? `, ${tiny} mảnh rất nhỏ` : ''} – thử tăng “Độ mịn lưới” hoặc giảm cỡ chữ mã</span>` : `<span style="color:#1d6b33">✔ Kiểm tra: mọi mảnh tách rời, mã nằm gọn trong ô</span>`);
+  $('#partInfo').textContent = `Hiện có ${part.regions.length} mảnh: ${fg} mảnh thuộc hình, ${part.regions.length - fg} mảnh nền.`;
+  renderWarnings(); renderColorSum(); renderColorBar(); drawMask(); renderClusters();
+  $$('.qcard').forEach((c, i) => { const q = st.questions[i]; if (q) { c.style.borderLeftColor = (PALETTE[q.color] || PALETTE[0]).hex; const s = c.querySelector('select.qc'); if (s) s.value = q.color; } });
+}
+function renderWarnings() {
+  const w = []; const pres = cur.present || {}; const qc = {}; st.questions.forEach((q, i) => (qc[q.color] = qc[q.color] || []).push(i + 1));
+  if (!st.questions.length) w.push(['err', 'Chưa có câu hỏi nào. Thêm câu hỏi ở thẻ “1. Câu hỏi”.']);
+  if (!Object.keys(pres).length) w.push(['err', 'Hình ẩn đang trống. Nhập chữ hoặc chọn hình ở thẻ “2. Hình ẩn”.']);
+  Object.keys(pres).forEach(c => { if (!qc[c]) w.push(['err', `Màu <b>${PALETTE[c].name}</b> có trong hình nhưng chưa có câu hỏi nào tô màu này → phần hình đó sẽ không hiện ra.`, true]); });
+  Object.keys(qc).forEach(c => { if (!pres[c]) w.push(['', `Câu ${qc[c].join(', ')} tô màu <b>${PALETTE[c].name}</b> nhưng hình ẩn không có màu này (mã đúng sẽ không xuất hiện trên tranh).`, true]); });
+  const bad = st.questions.map((q, i) => localIssues(q).filter(x => x !== 'chưa chọn đáp án đúng').length ? i + 1 : 0).filter(Boolean); if (bad.length) w.push(['', `Câu ${bad.join(', ')} có lỗi định dạng (phương án trùng/trống, công thức lỗi) – xem ghi chú trong thẻ câu hỏi.`]);
+  const rv = st.questions.map((q, i) => q.vstate === 'review' ? i + 1 : 0).filter(Boolean); if (rv.length) w.push(['', `AI đề nghị giáo viên xem lại câu ${rv.join(', ')}.`]);
+  const noAns = st.questions.map((q, i) => q.correct < 0 ? i + 1 : 0).filter(Boolean); if (noAns.length) w.push(['err', `Câu ${noAns.join(', ')} chưa chọn đáp án đúng.`]);
+  if (cur.part) { const shown = new Set(cur.part.regions.filter(g => g.code && g.code.ok).map(g => g.code.q)); const miss = st.questions.map((q, i) => q.correct >= 0 && pres[q.color] && !shown.has(i) ? i + 1 : 0).filter(Boolean); if (miss.length) w.push(['', `Mã đúng của câu ${miss.join(', ')} chưa có ô nào trên tranh (hình quá nhỏ) – giảm “Kích thước mảnh trong hình”.`]); }
+  if (st.questions.length && Object.keys(pres).length > st.questions.length) w.push(['err', `Hình có ${Object.keys(pres).length} màu nhưng chỉ có ${st.questions.length} câu hỏi. Cần ít nhất mỗi màu 1 câu.`]);
+  $('#warns').innerHTML = w.map(([c, t, fix]) => `<div class="warn ${c}">${t}${fix ? ' <button class="btn sm" data-fixcolor>Tự chia màu lại</button>' : ''}</div>`).join('');
+  $$('[data-fixcolor]').forEach(b => b.onclick = () => { autoAssign(cur.present || {}); renderQList(); persist(); recompute(); });
+}
+function renderColorBar() { const used = [...new Set([...Object.keys(cur.present || {}).map(Number), ...st.questions.map(q => q.color)])].sort((a, b) => a - b);
+  const bar = $('#colorBar'); if (bar.contains(document.activeElement)) return;
+  bar.innerHTML = used.map(i => `<label class="cchip" title="Bấm vòng màu để đổi màu; sửa tên màu ở ô chữ"><input type="color" data-ci="${i}" value="${PALETTE[i].hex.toLowerCase()}"><input type="text" data-cn="${i}" value="${escH(PALETTE[i].name)}"></label>`).join(''); }
+$('#colorBar').addEventListener('input', e => { const ci = e.target.dataset.ci, cn = e.target.dataset.cn; if (ci != null) { st.palette[ci] = Object.assign({}, st.palette[ci], { hex: e.target.value }); } else if (cn != null) { st.palette[cn] = Object.assign({}, st.palette[cn], { name: e.target.value }); } else return; E.applyPalette(st.palette); persist(); renderSoon(); });
+$('#colorBar').addEventListener('change', () => { renderQList(); renderWordChips(); });
+$('#bPalReset').onclick = () => { st.palette = {}; E.applyPalette(st.palette); persist(); renderQList(); renderWordChips(); $('#colorBar').innerHTML = ''; render(); };
+const renderSoon = (() => { let t; return () => { clearTimeout(t); t = setTimeout(render, 120); }; })();
+function renderColorSum() { const qc = {}; st.questions.forEach(q => qc[q.color] = (qc[q.color] || 0) + 1); const pres = cur.present || {};
+  const keys = [...new Set([...Object.keys(qc), ...Object.keys(pres)])].map(Number);
+  $('#colorSum').innerHTML = keys.map(c => `<span class="chip" style="padding-right:9px"><span class="dot" style="background:${PALETTE[c].hex}"></span>${PALETTE[c].name}: ${qc[c] || 0} câu${pres[c] ? '' : ' (không có trong hình)'}</span>`).join(''); }
+
+/* ---- danh sách câu hỏi ---- */
+function palOpts(sel) { return PALETTE.map((p, i) => `<option value="${i}" ${i === sel ? 'selected' : ''}>● ${p.name}</option>`).join(''); }
+const escH = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+function renderQList() {
+  $('#qCount').textContent = `(${st.questions.length})`; $('#autoColor').checked = st.autoColor; $('#autoRand').checked = !!st.autoRand; $('#autoRotate').checked = st.autoRotate !== false; renderPattern();
+  $('#qList').innerHTML = st.questions.map((q, i) => `<div class="qcard ${q.correct < 0 ? 'bad' : ''}" data-i="${i}" style="border-left-color:${(PALETTE[q.color] || PALETTE[0]).hex}">
+    <div class="qhead"><b>Câu ${i + 1}</b><select class="qc" title="Màu tô">${palOpts(q.color)}</select>${st.meta.showColorHint ? `<label class="chk" style="margin:0 0 0 4px;font-size:12px" title="Hiện dòng yêu cầu tô màu dưới câu này"><input type="checkbox" class="qh" ${q.hint !== false ? 'checked' : ''}> Hiện yêu cầu tô màu</label>` : ''}<span style="flex:1"></span>
+      <button class="btn sm ghost" data-act="up" title="Lên">↑</button><button class="btn sm ghost" data-act="down" title="Xuống">↓</button><button class="btn sm ghost" data-act="dup" title="Nhân bản">⧉</button><button class="btn sm ghost" data-act="del" title="Xóa">✕</button></div>
+    ${(() => { const li = localIssues(q); const vb = q.vstate === 'ok' ? `<div class="vb ok">✔ AI đã kiểm tra: đúng${q.vnote ? ' – ' + escH(q.vnote) : ''}</div>` : q.vstate === 'fixed' ? `<div class="vb fx">✎ AI đã sửa: ${escH(q.vnote || '')}</div>` : q.vstate === 'review' ? `<div class="vb rv">⚠ Cần xem lại: ${escH(q.vnote || '')}</div>` : ''; return vb + (li.length ? `<div class="vb rv">⚠ ${li.map(escH).join('; ')}</div>` : ''); })()}
+    <textarea class="qt" rows="2" placeholder="Nội dung câu hỏi">${escH(q.text)}</textarea>
+    ${q.options.map((o, k) => `<div class="opt ${q.correct === k ? 'ok' : ''}"><input type="radio" name="c${i}" value="${k}" ${q.correct === k ? 'checked' : ''} title="Đáp án đúng"><span class="L">${LET[k]}</span><input type="text" class="qo" data-k="${k}" value="${escH(o)}">${q.options.length > 2 ? `<button class="btn sm ghost" data-act="rmopt" data-k="${k}" title="Bỏ phương án">−</button>` : ''}</div>`).join('')}
+    ${q.options.length < 6 ? `<button class="btn sm ghost" data-act="addopt" style="margin-top:4px">+ phương án</button>` : ''}
+    <input type="text" class="qe" placeholder="Giải thích (hiện ở trang đáp án)" value="${escH(q.explain)}" style="margin-top:6px;font-size:12.5px">
+    <div class="qprev" style="display:none"></div>
+  </div>`).join('');
+  $$('#qList .qcard').forEach(updatePreview);
+}
+$('#qList').addEventListener('input', e => { const c = e.target.closest('.qcard'); if (!c) return; const q = st.questions[+c.dataset.i];
+  if (q.vstate) { delete q.vstate; delete q.vnote; }
+  if (e.target.classList.contains('qt')) q.text = e.target.value; else if (e.target.classList.contains('qo')) q.options[+e.target.dataset.k] = e.target.value; else if (e.target.classList.contains('qe')) q.explain = e.target.value; else return;
+  updatePreviewSoon(c); persist(); recomputeSoon(); });
+$('#qList').addEventListener('change', e => { const c = e.target.closest('.qcard'); if (!c) return; const i = +c.dataset.i, q = st.questions[i];
+  if (e.target.type === 'radio') { q.correct = +e.target.value; renderQList(); }
+  else if (e.target.classList.contains('qh')) { q.hint = e.target.checked; persist(); render(); return; }
+  else if (e.target.classList.contains('qc')) { q.color = +e.target.value; st.autoColor = false; $('#autoColor').checked = false; c.style.borderLeftColor = PALETTE[q.color].hex; } else return;
+  persist(); recompute(); });
+$('#qList').addEventListener('click', e => { const b = e.target.closest('[data-act]'); if (!b) return; const c = b.closest('.qcard'); const i = +c.dataset.i; const Q = st.questions; const a = b.dataset.act;
+  if (a === 'del') Q.splice(i, 1); else if (a === 'up' && i > 0) [Q[i - 1], Q[i]] = [Q[i], Q[i - 1]]; else if (a === 'down' && i < Q.length - 1) [Q[i + 1], Q[i]] = [Q[i], Q[i + 1]]; else if (a === 'dup') Q.splice(i + 1, 0, JSON.parse(JSON.stringify(Q[i])));
+  else if (a === 'addopt') Q[i].options.push(''); else if (a === 'rmopt') { const k = +b.dataset.k; Q[i].options.splice(k, 1); if (Q[i].correct === k) Q[i].correct = -1; else if (Q[i].correct > k) Q[i].correct--; }
+  renderQList(); persist(); recompute(); });
+const updatePreviewSoon = (() => { const t = new Map(); return c => { clearTimeout(t.get(c)); t.set(c, setTimeout(() => updatePreview(c), 350)); }; })();
+function addQ() { st.questions.push({ text: '', options: ['', '', '', ''], correct: -1, color: st.questions.length ? st.questions[st.questions.length - 1].color : 0, explain: '' }); renderQList(); persist(); recompute(); setTimeout(() => { const t = $$('.qcard .qt'); t[t.length - 1] && t[t.length - 1].focus(); }, 50); }
+$('#bAddQ').onclick = addQ; $('#bAddQ2').onclick = addQ;
+$('#bClearQ').onclick = () => { if (!st.questions.length) return; const b = $('#bClearQ'); if (b.dataset.sure) { st.questions = []; delete b.dataset.sure; b.textContent = '🗑 Xóa hết'; renderQList(); persist(); recompute(); } else { b.dataset.sure = 1; b.textContent = 'Bấm lần nữa để xóa'; setTimeout(() => { delete b.dataset.sure; b.textContent = '🗑 Xóa hết'; }, 3000); } };
+const LOCK_RE = /(tất cả|cả (hai|ba|bốn)|cả\s+[A-F]\s*(,|và)|\b[A-F]\s*(và|,)\s*[A-F]\b|(đều|cả) (đúng|sai)|không có (đáp án|phương án|câu) nào|các (đáp án|phương án) trên|all of the above|none of the above|both)/i;
+function balancedLetters(qs, r) { // chuỗi vị trí đúng cân bằng, tránh lặp quá 2 câu liền
+  const n = qs.length; const seq = []; let pool = [];
+  for (let i = 0; i < n; i++) { const k = qs[i].options.length; if (!pool.length) pool = E.shuffle([0, 1, 2, 3, 4, 5].slice(0, Math.max(2, Math.min(4, k))), r); seq.push(pool.pop()); }
+  for (let it = 0; it < 60; it++) { let bad = -1; for (let i = 2; i < n; i++) if (seq[i] === seq[i - 1] && seq[i] === seq[i - 2]) { bad = i; break; } if (bad < 0) break; const j = Math.floor(r() * n); [seq[bad], seq[j]] = [seq[j], seq[bad]]; }
+  return seq; }
+function randomizeAnswers(qs, seed) { const r = E.rng(seed || (Date.now() % 1e9)); const valid = qs.filter(q => q.correct >= 0 && q.options.length >= 2); const tgt = balancedLetters(valid, r); let changed = 0;
+  valid.forEach((q, qi) => { const n = q.options.length; const locked = q.options.map((o, i) => LOCK_RE.test(o) && i !== q.correct ? true : LOCK_RE.test(o));
+    if (locked[q.correct]) return; // đáp án đúng là “tất cả…” → giữ nguyên
+    const free = q.options.map((_, i) => i).filter(i => !locked[i]); let t = tgt[qi] % n; if (!free.includes(t)) t = free[Math.floor(r() * free.length)];
+    const right = q.options[q.correct], others = free.filter(i => i !== q.correct).map(i => q.options[i]); E.shuffle(others, r);
+    const out = q.options.slice(); let oi = 0; free.forEach(i => { out[i] = i === t ? right : others[oi++]; });
+    const expl = q.explain; q.options = out; if (q.correct !== t) changed++; q.correct = t; q.explain = expl; });
+  return changed; }
+function renderPattern() { const box = $('#ansPattern'); if (!box) return; const qs = st.questions; if (!qs.length) { box.innerHTML = ''; return; }
+  const cnt = {}; qs.forEach(q => { if (q.correct >= 0) cnt[LET[q.correct]] = (cnt[LET[q.correct]] || 0) + 1; });
+  box.innerHTML = `<div class="small" style="font-weight:700;margin-bottom:4px">Đáp án đúng hiện tại:</div><div style="display:flex;flex-wrap:wrap;gap:4px">${qs.map((q, i) => `<span style="border:1px solid var(--line);border-radius:6px;padding:2px 6px;font-size:12px;background:#fff"><b>${i + 1}</b>-${q.correct >= 0 ? LET[q.correct] : '?'}</span>`).join('')}</div><div class="small" style="margin-top:4px">Phân bố: ${'ABCDEF'.split('').filter(l => cnt[l]).map(l => `${l}: ${cnt[l]}`).join(' · ')}</div>`; }
+$('#bRandAns').onclick = () => { if (!st.questions.length) { toast('Chưa có câu hỏi.'); return; } const n = randomizeAnswers(st.questions); renderQList(); persist(); recompute(); toast(`Đã trộn: ${n} câu đổi vị trí đáp án đúng. Bấm lại để có kiểu trộn khác.`); };
+$('#bRandQ').onclick = () => { if (st.questions.length < 2) return; E.shuffle(st.questions, E.rng(Date.now() % 1e9)); renderQList(); persist(); recompute(); toast('Đã trộn thứ tự câu hỏi.'); };
+$('#autoRand').onchange = e => { st.autoRand = e.target.checked; persist(); };
+function rotateAnswers(step) { let n = 0; st.questions.forEach(q => { if (q.correct < 0 || q.options.length < 2) return; const free = q.options.map((_, i) => i).filter(i => !LOCK_RE.test(q.options[i])); if (!free.includes(q.correct) || free.length < 2) return;
+    const vals = free.map(i => q.options[i]); const k = free.indexOf(q.correct); const m = free.length; const sh = ((step % m) + m) % m; const out = q.options.slice(); free.forEach((pos, j) => { out[free[(j + sh) % m]] = vals[j]; }); q.options = out; q.correct = free[(k + sh) % m]; n++; }); return n; }
+function picSig() { const p = st.pic; return JSON.stringify([p.mode, p.mode !== 'image' ? caseOf(p.text).replace(/\s+/g, ' ').trim() : '', p.mode !== 'text' ? [p.imgSrc, p.imgSrc === 'upload' ? (p.image || '').length + (p.image || '').slice(-40) : p.imgSrc === 'ai' ? (p.aiSvg || '').length : p.emoji] : '']); }
+let rotT = 0;
+function checkRotate() { if (st.autoRotate === false) return; const sig = picSig(); if (st.lastPicSig == null) { st.lastPicSig = sig; persist(); return; } if (sig === st.lastPicSig) return;
+  clearTimeout(rotT); rotT = setTimeout(() => { const s2 = picSig(); if (s2 === st.lastPicSig) return; if (!s2.replace(/[\[\]",]/g, '').trim()) return; st.lastPicSig = s2; if (!st.questions.length) { persist(); return; }
+    rotateAnswers(1); renderQList(); persist(); recompute(); toast('Tranh mới → đáp án đúng đã nhảy vị trí: ' + st.questions.map((q, i) => (i + 1) + LET[q.correct]).join(' '), 4500); }, 2500); }
+$('#autoRotate').onchange = e => { st.autoRotate = e.target.checked; if (e.target.checked) st.lastPicSig = picSig(); persist(); };
+$('#bRotate').onclick = () => { if (!st.questions.length) return; rotateAnswers(1); renderQList(); persist(); recompute(); toast('Đáp án đúng: ' + st.questions.map((q, i) => (i + 1) + LET[q.correct]).join(' ')); };
+$('#autoColor').onchange = e => { st.autoColor = e.target.checked; persist(); recompute(); setTimeout(renderQList, 300); };
+
+/* ---- hình ẩn UI ---- */
+const SLIDERS = [['pThick', 'thick'], ['pSpacing', 'spacing'], ['pThr', 'thr'], ['pK', 'k'], ['pCols', 'cols'], ['pBg', 'bgSize'], ['pFg', 'fgSize'], ['pLab', 'labSize'], ['pBgTol', 'bgTol'], ['pImgThick', 'imgThick'], ['pComboRatio', 'comboRatio'], ['pLineGap', 'lineGap']];
+function syncPicUI() { const p = st.pic;
+  $$('#picMode button').forEach(b => b.classList.toggle('on', b.dataset.m === p.mode)); $$('#imgSrc button').forEach(b => b.classList.toggle('on', b.dataset.s === p.imgSrc));
+  $('#g-text').style.display = p.mode === 'image' ? 'none' : ''; $('#g-combo').style.display = p.mode === 'combo' ? '' : 'none'; $('#g-image').style.display = p.mode === 'text' ? 'none' : '';
+  ['upload', 'shape', 'ai'].forEach(k => $('#s-' + k).style.display = p.imgSrc === k ? '' : 'none');
+  $$('#pCase button').forEach(b => b.classList.toggle('on', b.dataset.c === (p.case || 'upper'))); $('#pText').style.textTransform = (p.case || 'upper') === 'upper' ? 'uppercase' : (p.case === 'lower' ? 'lowercase' : 'none');
+  $('#pText').value = p.text; $('#pFont').value = p.font; $('#pFit').value = p.fit; $('#pEmoji').value = String(p.emoji).startsWith('shape:') ? '' : p.emoji; $('#pInvert').checked = p.invert; $('#pStretch').checked = !!p.stretch; $('#pAutoWrap').checked = p.autoWrap !== false;
+  $('#pConv').value = p.conv; $('#pBgRemove').checked = !!p.bgRemove; $('#pKeepDetail').checked = p.keepDetail !== false; $('#r-detail').style.display = p.conv === 'silhouette' ? '' : 'none'; $('#pComboOrder').value = p.comboOrder; $('#pAIDesc').value = p.aiDesc || '';
+  $('#r-bgtol').style.display = p.bgRemove ? '' : 'none'; $('#r-thr').style.display = p.conv === 'silhouette' || p.conv === 'levels' ? 'none' : ''; $('#r-k').style.display = p.conv === 'color' || p.conv === 'levels' ? '' : 'none';
+  $('#bThrAuto').style.display = p.conv === 'bw' ? '' : 'none'; $('#lThr').textContent = p.conv === 'edge' ? 'Độ nhạy nét (cao = nhiều nét)' : p.conv === 'bw' ? (p.thrAuto ? 'Ngưỡng sáng – tối (đang tự động)' : 'Ngưỡng sáng – tối') : 'Ngưỡng tách nền';
+  SLIDERS.forEach(([id, k]) => { $('#' + id).value = p[k]; $('#v' + id.slice(1)).textContent = p[k]; });
+  $('#emoGrid').innerHTML = EMOJIS.map(e => `<button class="${e === p.emoji ? 'on' : ''}">${e}</button>`).join('');
+  $('#shapeGrid').innerHTML = Object.entries(SHAPES).map(([k, v]) => `<button data-sh="${k}" class="${p.emoji === 'shape:' + k ? 'on' : ''}" style="font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px"><img src="${shapeThumb(k)}" width="34" height="34" alt="">${v.n}</button>`).join('');
+  renderWordChips(); }
+function renderWordChips() { const ws = words(); while (st.pic.wordColors.length < ws.length) st.pic.wordColors.push(CYCLE[st.pic.wordColors.length % CYCLE.length]);
+  $('#wordChips').innerHTML = ws.map((w, i) => `<span class="chip"><span class="dot" style="background:${PALETTE[st.pic.wordColors[i]].hex}"></span>${escH(w.w)}<select data-w="${i}">${palOpts(st.pic.wordColors[i])}</select></span>`).join('') + (ws.length > 1 ? `<button class="btn sm" id="oneColor">Tất cả 1 màu</button>` : '');
+  const oc = $('#oneColor'); if (oc) oc.onclick = () => { picChanged = true; st.pic.wordColors = st.pic.wordColors.map(() => st.pic.wordColors[0]); renderWordChips(); persist(); recompute(); }; }
+$('#wordChips').addEventListener('change', e => { const i = e.target.dataset.w; if (i == null) return; picChanged = true; st.pic.wordColors[+i] = +e.target.value; renderWordChips(); persist(); recompute(); });
+function picSet(fn, soon) { picChanged = true; fn(st.pic); syncPicUI(); persist(); soon ? recomputeSoon() : recompute(); }
+$$('#picMode button').forEach(b => b.onclick = () => picSet(p => { p.mode = b.dataset.m; }));
+$$('#imgSrc button').forEach(b => b.onclick = () => picSet(p => { p.imgSrc = b.dataset.s; p.clusterMap = {}; if (p.imgSrc === 'upload') { p.conv = 'silhouette'; p.bgRemove = true; p.keepDetail = true; } else { p.conv = 'color'; p.bgRemove = false; p.thr = 0.6; } }));
+$$('#pCase button').forEach(b => b.onclick = () => picSet(p => { p.case = b.dataset.c; }));
+$('#pText').oninput = e => { picChanged = true; st.pic.text = e.target.value; renderWordChips(); persist(); recomputeSoon(); };
+$('#pFont').onchange = e => { st.pic.font = e.target.value; persist(); recompute(); };
+$('#pAutoWrap').onchange = e => { st.pic.autoWrap = e.target.checked; persist(); recompute(); };
+$('#pStretch').onchange = e => { st.pic.stretch = e.target.checked; persist(); recompute(); };
+$('#pFit').onchange = e => { st.pic.fit = e.target.value; persist(); recompute(); };
+$('#pConv').onchange = e => picSet(p => { p.conv = e.target.value; p.clusterMap = {}; if (p.conv === 'levels' && p.k < 2) p.k = 2; if (p.conv === 'bw') p.thrAuto = true; if (p.conv === 'edge') p.thr = 0.55; if (p.conv === 'color') p.thr = 0.6; });
+$('#pKeepDetail').onchange = e => picSet(p => { p.keepDetail = e.target.checked; });
+$('#pBgRemove').onchange = e => picSet(p => { p.bgRemove = e.target.checked; });
+$('#pComboOrder').onchange = e => picSet(p => { p.comboOrder = e.target.value; });
+$('#bThrAuto').onclick = () => picSet(p => { p.thrAuto = true; });
+SLIDERS.forEach(([id, k]) => { $('#' + id).oninput = e => { st.pic[k] = +e.target.value; $('#v' + id.slice(1)).textContent = e.target.value; if (k === 'k') { st.pic.clusterMap = {}; picChanged = true; } if (k === 'thr' && st.pic.conv === 'bw') st.pic.thrAuto = false; if (['bgTol', 'imgThick', 'comboRatio', 'lineGap'].includes(k)) picChanged = true; persist(); recomputeSoon(); }; });
+const thumbs = {}; function shapeThumb(k) { if (!thumbs[k]) { const c = shapeCanvas(k); const t = document.createElement('canvas'); t.width = t.height = 68; t.getContext('2d').drawImage(c, 0, 0, 68, 68); thumbs[k] = t.toDataURL(); } return thumbs[k]; }
+$('#shapeGrid').onclick = e => { const b = e.target.closest('button'); if (!b) return; picSet(p => { p.emoji = 'shape:' + b.dataset.sh; p.k = SHAPES[b.dataset.sh].k; p.clusterMap = {}; p.conv = 'color'; p.bgRemove = false; p.thr = 0.6; }); if (!st.meta.pictureName || Object.values(SHAPES).some(v => v.n.toUpperCase() === st.meta.pictureName.toUpperCase())) { st.meta.pictureName = SHAPES[b.dataset.sh].n; syncMetaUI(); persist(); render(); } };
+$('#emoGrid').onclick = e => { const b = e.target.closest('button'); if (!b) return; picSet(p => { p.emoji = b.textContent; p.clusterMap = {}; p.conv = 'color'; p.bgRemove = false; p.thr = 0.6; }); };
+$('#pEmoji').oninput = e => { if (e.target.value.trim()) { st.pic.emoji = e.target.value.trim(); st.pic.clusterMap = {}; picChanged = true; persist(); recomputeSoon(); } };
+$('#pInvert').onchange = e => picSet(p => { p.invert = e.target.checked; });
+$('#pAIDesc').oninput = e => { st.pic.aiDesc = e.target.value; persist(); };
+$('#fImg').onchange = async e => { const f = e.target.files[0]; if (!f) return; const url = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.readAsDataURL(f); });
+  const im = await loadImg(url); const c = document.createElement('canvas'); const sc = Math.min(1, 900 / Math.max(im.width, im.height)); c.width = Math.round(im.width * sc); c.height = Math.round(im.height * sc); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+  picSet(p => { p.image = c.toDataURL('image/png'); p.imgSrc = 'upload'; p.clusterMap = {}; if (!['silhouette', 'bw', 'edge', 'levels'].includes(p.conv)) { p.conv = 'silhouette'; p.bgRemove = true; } }); if (!st.meta.pictureName) $('#mPicName').placeholder = 'Nhập tên bức tranh (VD: Chú mèo)'; };
+function renderClusters() { if (st.pic.mode === 'text') return; $('#clusterChips').innerHTML = lastClusters.map((c, i) => `<span class="chip"><span class="dot" style="background:rgb(${c.rgb.map(Math.round).join(',')})"></span>vùng ${i + 1} →<select data-cl="${i}">${palOpts(c.pal)}</select></span>`).join(''); drawBW(); }
+$('#clusterChips').addEventListener('change', e => { const i = e.target.dataset.cl; if (i == null) return; picChanged = true; st.pic.clusterMap[i] = +e.target.value; persist(); recompute(); });
+function sanitizeSvg(t) { const m = String(t).match(/<svg[\s\S]*<\/svg>/i); if (!m) return null; let s2 = m[0].replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<foreignObject[\s\S]*?<\/foreignObject>/gi, '').replace(/\son\w+\s*=\s*("[^"]*"|'[^']*')/gi, '').replace(/(href\s*=\s*["'])(?!#)[^"']*["']/gi, '$1#"');
+  if (!/xmlns=/.test(s2)) s2 = s2.replace('<svg', '<svg xmlns="http://www.w3.org/2000/svg"'); if (!/\swidth=/.test(s2.slice(0, s2.indexOf('>')))) s2 = s2.replace('<svg', '<svg width="600" height="600"'); return s2; }
+$('#bAIDraw').onclick = async () => { const desc = ($('#pAIDesc').value || st.pic.text.replace(/\n/g, ' ')).trim(); if (!desc) { $('#aiDrawMsg').innerHTML = '<div class="warn">Nhập mô tả hoặc từ khóa ẩn trước.</div>'; return; }
+  const b = $('#bAIDraw'); b.disabled = true; const k = Math.max(1, Math.min(8, st.pic.k || 2));
+  const prompt = `Hãy vẽ một hình minh họa đơn giản cho: «${desc}» (dùng làm tranh tô màu cho học sinh).
+Yêu cầu bắt buộc: chỉ trả về DUY NHẤT một thẻ <svg> hợp lệ có xmlns="http://www.w3.org/2000/svg" và viewBox="0 0 100 100". Phong cách biểu tượng phẳng, mảng khối lớn, đường bao rõ, dễ nhận ra khi thu nhỏ thành lưới 60×60 ô. Dùng ${k <= 1 ? '1 màu' : 'tối đa ' + k + ' màu'} đặc, chỉ chọn trong các mã: #E53935, #1E5BD6, #2E9E44, #F57C00, #8E44AD, #F2C200, #8B5A2B, #2B2B2B, #E84393, #0EA5A5, #9AA0A6. Chi tiết bên trong (mắt, cửa sổ, khe hở) dùng #FFFFFF. Không chữ, không gradient, không bóng đổ, không nét mảnh dưới 4 đơn vị, không vẽ nền, hình chiếm gần hết khung.`;
+  try { const t = await askClaude(prompt, $('#aiDrawMsg')); const svg = sanitizeSvg(t); if (!svg) throw { message: 'AI không trả về hình hợp lệ, bấm Vẽ lại.' }; await loadImg(svgDataUrl(svg));
+    picSet(p => { p.aiSvg = svg; p.imgSrc = 'ai'; p.clusterMap = {}; p.conv = 'color'; p.bgRemove = false; p.thr = 0.6; }); $('#aiDrawMsg').innerHTML = '<div class="warn okmsg">Đã vẽ xong. Xem kết quả ở ô “Sau khi chuyển”.</div>';
+    if (!st.meta.pictureName) { st.meta.pictureName = desc; syncMetaUI(); } }
+  catch (e) { $('#aiDrawMsg').innerHTML = `<div class="warn err">${escH(e.message || e)}</div>`; } b.disabled = false; };
+$$('#qPreset button').forEach(b => b.onclick = () => picSet(p => { const c = +b.dataset.q; p.cols = c; p.bgSize = Math.round(40 * (c / 60) ** 2 / 2) * 2; p.fgSize = Math.max(8, Math.round(14 * (c / 60) ** 1.5)); }));
+$('#bAutoGrid').onclick = async () => { const b = $('#bAutoGrid'); b.disabled = true; b.innerHTML = '<span class="spin"></span> Đang thử…'; const keep = st.pic.cols; let best = null;
+  try { for (const c of [48, 54, 60, 66, 72, 78, 84, 90]) { const { W, H } = E.gridDims(st.meta.orientation, c, st.meta.paper); const m = await buildSourceMask(W, H); const f = fidelity(m, cur.cov) || 0; const sw = strokeWidth(m, W, H); const score = f + (sw >= 3 ? 0.03 : sw >= 2 ? 0 : -0.08) - (c - 48) * 0.0012; if (!best || score > best.score) best = { c, f, sw, score }; if (f >= 0.88 && sw >= 3) { best = { c, f, sw, score: 9 }; break; } } } catch (e) { console.error(e); }
+  b.disabled = false; b.innerHTML = '✨ Tự tối ưu độ mịn'; if (!best) { st.pic.cols = keep; return; } picSet(p => { p.cols = best.c; p.bgSize = Math.round(40 * (best.c / 60) ** 2 / 2) * 2; p.fgSize = Math.max(8, Math.round(14 * (best.c / 60) ** 1.5)); }); cur.srcKey = ''; toast(`Đã chọn lưới ${best.c} cột – độ khớp hình khoảng ${Math.round(best.f * 100)}%.`, 4000); };
+$('#bReseed').onclick = () => { st.pic.seed = (st.pic.seed * 7 + 13) % 99991 || 3; persist(); recompute(); };
+
+/* ---- vẽ tay mặt nạ ---- */
+let brush = 0; const undo = [];
+function drawMask() { const cv = $('#maskCv'); if (!cur.mask) return; const W = cur.W, H = cur.H; const px = Math.max(4, Math.floor(420 / W)); cv.width = W * px; cv.height = H * px; const x = cv.getContext('2d');
+  x.fillStyle = '#fff'; x.fillRect(0, 0, cv.width, cv.height);
+  for (let i = 0; i < W * H; i++) { const v = cur.mask[i]; if (v >= 0) { x.fillStyle = PALETTE[v].hex; x.fillRect((i % W) * px, Math.floor(i / W) * px, px, px); } }
+  x.strokeStyle = 'rgba(0,0,0,.07)'; x.lineWidth = 1; x.beginPath(); for (let i = 0; i <= W; i++) { x.moveTo(i * px + .5, 0); x.lineTo(i * px + .5, cv.height); } for (let j = 0; j <= H; j++) { x.moveTo(0, j * px + .5); x.lineTo(cv.width, j * px + .5); } x.stroke();
+  cv._px = px;
+  const used = Object.keys(cur.present || {}).map(Number); const list = [...new Set([...used, ...st.questions.map(q => q.color)])];
+  $('#brushes').innerHTML = list.map(c => `<span class="sw ${brush === c ? 'on' : ''}" data-b="${c}" title="${PALETTE[c].name}" style="background:${PALETTE[c].hex}"></span>`).join('') + `<span class="sw ${brush === -1 ? 'on' : ''}" data-b="-1" title="Tẩy" style="background:#fff;display:grid;place-items:center;font-size:13px">⌫</span>` + `<select id="brushMore" style="width:auto;font-size:12px;padding:3px"><option value="">+ màu khác</option>${PALETTE.map((p, i) => `<option value="${i}">${p.name}</option>`).join('')}</select>`;
+  $('#maskNote').textContent = st.maskEdit ? 'Đang dùng hình đã chỉnh tay. Đổi chữ/hình nguồn sẽ bỏ phần chỉnh tay.' : '';
+}
+$('#brushes').addEventListener('click', e => { const s = e.target.closest('[data-b]'); if (!s) return; brush = +s.dataset.b; drawMask(); });
+$('#brushes').addEventListener('change', e => { if (e.target.id === 'brushMore' && e.target.value !== '') { brush = +e.target.value; drawMask(); } });
+(function () { const cv = $('#maskCv'); let down = false, work = null;
+  const paint = e => { const r = cv.getBoundingClientRect(); const px = cv._px * r.width / cv.width; const gx = Math.floor((e.clientX - r.left) / px), gy = Math.floor((e.clientY - r.top) / px); const bs = +$('#brushSize').value; const o = Math.floor((bs - 1) / 2);
+    let ch = false; for (let dy = 0; dy < bs; dy++) for (let dx = 0; dx < bs; dx++) { const x = gx - o + dx, y = gy - o + dy; if (x < 0 || y < 0 || x >= cur.W || y >= cur.H) continue; const i = y * cur.W + x; if (work[i] !== brush) { work[i] = brush; ch = true; } }
+    if (ch) { cur.mask = work; cur.present = presentColors(work); drawMaskFast(); } };
+  cv.addEventListener('pointerdown', e => { if (!cur.mask) return; down = true; cv.setPointerCapture(e.pointerId); undo.push(Int16Array.from(cur.mask)); if (undo.length > 30) undo.shift(); work = Int16Array.from(cur.mask); paint(e); });
+  cv.addEventListener('pointermove', e => { if (down) paint(e); });
+  const up = () => { if (!down) return; down = false; picChanged = true; st.maskEdit = { key: cur.srcKey, data: Array.from(work) }; persist(); recompute(); };
+  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up); })();
+function drawMaskFast() { const cv = $('#maskCv'), x = cv.getContext('2d'), px = cv._px; for (let i = 0; i < cur.W * cur.H; i++) { const v = cur.mask[i]; x.fillStyle = v >= 0 ? PALETTE[v].hex : '#fff'; x.fillRect((i % cur.W) * px + 1, Math.floor(i / cur.W) * px + 1, px - 1, px - 1); } }
+$('#bUndoMask').onclick = () => { const u = undo.pop(); if (!u) return; st.maskEdit = { key: cur.srcKey, data: Array.from(u) }; persist(); recompute(); };
+$('#bResetMask').onclick = () => { st.maskEdit = null; persist(); recompute(); };
+
+/* ---- trang ---- */
+const ACCENTS = [['#1F3A5F', 'Xanh navy'], ['#0F5C63', 'Xanh cổ vịt'], ['#1E5B3A', 'Xanh rêu'], ['#8E1B1B', 'Đỏ đô'], ['#B54A0B', 'Cam đất'], ['#4B2C6F', 'Tím than'], ['#7A2E5B', 'Hồng mận'], ['#1A1A1A', 'Đen']];
+function syncMetaUI() { const m = st.meta; $$('#mPrint button').forEach(b => b.classList.toggle('on', b.dataset.p === (m.printMode || 'color'))); $('#accBox').style.display = m.printMode === 'bw' ? 'none' : '';
+  $('#accSw').innerHTML = ACCENTS.map(([c, n]) => `<span class="sw ${(m.accent || '').toUpperCase() === c ? 'on' : ''}" data-acc="${c}" title="${n}" style="display:inline-block;width:28px;height:28px;border-radius:7px;background:${c};cursor:pointer;box-shadow:0 0 0 ${(m.accent || '').toUpperCase() === c ? '3px #fff,0 0 0 5px ' + c : '1px #ccc'}"></span>`).join('') + `<input type="color" id="accPick" value="${(m.accent || '#1F3A5F').toLowerCase()}" title="Màu khác" style="width:34px;height:30px;border:0;padding:0;background:none">`;
+  $('#mSub').value = m.subtitle || ''; $('#mGuide').checked = m.includeGuide !== false; $('#mFooter').value = m.footer != null ? m.footer : ''; $('#mHintTpl').value = m.hintTpl || ''; $('#hintBox').style.display = m.showColorHint ? '' : 'none'; $('#mTitle').value = m.title; $('#mShowName').checked = m.showName; $('#mNameLine').value = m.nameLine; $('#mInstr').value = m.instruction; $('#mHint').checked = m.showColorHint; $('#mQSize').value = String(m.qSize || 0); $('#mPaper').value = m.paper || 'A4'; $('#mLS').value = m.lineSpacing; $('#vLS').textContent = (+m.lineSpacing).toFixed(2); $('#mQGap').value = m.qGap; $('#vQGap').textContent = m.qGap; $('#mATitle').value = m.answerTitle; $('#mTeacher').value = m.teacherNote; $('#mPicName').value = m.pictureName;
+  $$('#orient button').forEach(b => b.classList.toggle('on', b.dataset.o === m.orientation)); $$('#viewMode button').forEach(b => b.classList.toggle('on', b.dataset.v === st.view)); }
+[['mTitle', 'title'], ['mNameLine', 'nameLine'], ['mInstr', 'instruction'], ['mATitle', 'answerTitle'], ['mTeacher', 'teacherNote'], ['mPicName', 'pictureName']].forEach(([id, k]) => $('#' + id).oninput = e => { st.meta[k] = e.target.value; persist(); recomputeSoon(); });
+$('#mShowName').onchange = e => { st.meta.showName = e.target.checked; persist(); render(); };
+$$('#mPrint button').forEach(b => b.onclick = () => { st.meta.printMode = b.dataset.p; syncMetaUI(); persist(); render(); });
+$('#accSw').addEventListener('click', e => { const t = e.target.closest('[data-acc]'); if (!t) return; st.meta.accent = t.dataset.acc; syncMetaUI(); persist(); render(); });
+$('#accSw').addEventListener('input', e => { if (e.target.id === 'accPick') { st.meta.accent = e.target.value.toUpperCase(); persist(); renderSoon(); } });
+$('#mGuide').onchange = e => { st.meta.includeGuide = e.target.checked; persist(); render(); };
+$('#bSeeGuide').onclick = () => { st.view = 'guide'; syncMetaUI(); persist(); render(); $('#view').scrollTop = 0; };
+$('#mSub').oninput = e => { st.meta.subtitle = e.target.value; persist(); renderSoon(); };
+$('#mFooter').oninput = e => { st.meta.footer = e.target.value; persist(); renderSoon(); };
+$('#mHint').onchange = e => { st.meta.showColorHint = e.target.checked; $('#hintBox').style.display = e.target.checked ? '' : 'none'; renderQList(); persist(); render(); };
+$('#mHintTpl').oninput = e => { st.meta.hintTpl = e.target.value; persist(); renderSoon(); };
+$('#mHintPreset').onchange = e => { if (!e.target.value) return; st.meta.hintTpl = e.target.value; $('#mHintTpl').value = e.target.value; e.target.value = ''; persist(); render(); };
+$('#bHintAll').onclick = () => { st.questions.forEach(q => q.hint = true); renderQList(); persist(); render(); };
+$('#bHintNone').onclick = () => { st.questions.forEach(q => q.hint = false); renderQList(); persist(); render(); };
+$('#mPaper').onchange = e => { st.meta.paper = e.target.value; persist(); recompute(); };
+$('#mLS').oninput = e => { st.meta.lineSpacing = +e.target.value; $('#vLS').textContent = (+e.target.value).toFixed(2); persist(); renderSoon(); };
+$('#mQGap').oninput = e => { st.meta.qGap = +e.target.value; $('#vQGap').textContent = e.target.value; persist(); renderSoon(); };
+$('#mQSize').onchange = e => { st.meta.qSize = +e.target.value; persist(); render(); };
+$$('#orient button').forEach(b => b.onclick = () => { st.meta.orientation = b.dataset.o; syncMetaUI(); persist(); recompute(); });
+$$('#viewMode button').forEach(b => b.onclick = () => { st.view = b.dataset.v; syncMetaUI(); persist(); render(); });
+$$('.tabs button').forEach(b => b.onclick = () => { $$('.tabs button').forEach(x => x.classList.toggle('on', x === b)); $$('.pane').forEach(p => p.classList.toggle('on', p.id === 'pane-' + b.dataset.tab)); });
+
+/* ============ NHẬP CÂU HỎI ============ */
+const strip = s => s.replace(/[\u0001\u0002]/g, '');
+function parseQuestionsText(raw) {
+  const lines = raw.normalize('NFC').replace(/\r/g, '').replace(/\t/g, '   ').split('\n');
+  const qs = []; let cur = null, last = null, keyMode = false; const gkey = {};
+  const qRe = /^\s*(?:câu|cau|bài|question)\s*(\d+)\s*[.:)\-–]?\s*(.*)$/i, qRe2 = /^\s*(\d{1,3})\s*[.)]\s+(.*)$/;
+  const ansRe = /^\s*(?:đáp\s*án(?:\s*đúng)?|đ\/a|answer|chọn|key)\s*[:.\-]?\s*([A-F])\b[.):]?\s*(.*)$/i;
+  const expRe = /^\s*(?:giải\s*thích|lời\s*giải|hướng\s*dẫn(?:\s*giải)?|hd|giải|explanation)\s*[:.]\s*(.*)$/i;
+  const optStart = /^[\u0001\u0002*\s]*[A-F]\s*[.)]/;
+  for (const l0 of lines) { const line = l0.trim(), plain = strip(line).trim(); if (!plain) continue;
+    if (/^(?:bảng\s*)?đáp\s*án\s*:?\s*$|^answer\s*key\s*:?$/i.test(plain)) { keyMode = true; continue; }
+    const pairs = [...plain.matchAll(/(\d{1,3})\s*[-.:)]?\s*([A-F])(?![A-Za-zÀ-ỹ])/g)];
+    if (pairs.length >= 2 && (keyMode || /^đáp\s*án/i.test(plain)) && pairs.map(m => m[0]).join('').replace(/\s/g, '').length >= plain.replace(/^đáp\s*án\s*:?/i, '').replace(/[\s,;|]/g, '').length * 0.8) { pairs.forEach(m => gkey[+m[1]] = m[2].toUpperCase()); continue; }
+    let m;
+    if (!keyMode && ((m = plain.match(qRe)) || ((!cur || cur.options.length >= 2) && (m = plain.match(qRe2))))) {
+      cur = { num: +m[1], text: '', options: [], em: [], star: [], correct: -1, explain: '' }; qs.push(cur); last = 'q';
+      const rest = line.replace(/^[\u0001\u0002\s]*(?:(?:câu|cau|bài|question)\s*)?\d+\s*[.:)\-–]?\s*/i, '');
+      const sp = splitOpts(rest, 0); if (sp.opts.length >= 2 && sp.head !== null) { cur.text = strip(sp.head).trim(); addOpts(cur, sp.opts); last = 'o'; } else cur.text = strip(rest).trim();
+      continue; }
+    if (!cur) continue;
+    if ((m = plain.match(ansRe))) { cur.correct = 'ABCDEF'.indexOf(m[1].toUpperCase()); if (m[2] && (m = m[2].match(/^(?:giải\s*thích|vì)?\s*[:.]?\s*(.+)/i))) { cur.explain = m[1]; last = 'e'; } else last = 'a'; continue; }
+    if ((m = plain.match(expRe))) { cur.explain = m[1]; last = 'e'; continue; }
+    if (optStart.test(line)) { const sp = splitOpts(line, cur.options.length); if (sp.opts.length) { addOpts(cur, sp.opts); last = 'o'; continue; } }
+    if (last === 'e') cur.explain += ' ' + plain; else if (last === 'o' && cur.options.length) cur.options[cur.options.length - 1] += ' ' + plain; else if (last === 'q') cur.text += ' ' + plain; }
+  const out = [];
+  qs.forEach((q, qi) => { if (q.options.length < 2) return; let correct = q.correct;
+    if (correct < 0 && gkey[q.num]) correct = 'ABCDEF'.indexOf(gkey[q.num]);
+    if (correct < 0) { const s = q.star.map((v, i) => v ? i : -1).filter(i => i >= 0); if (s.length === 1) correct = s[0]; }
+    if (correct < 0) { const e = q.em.map((v, i) => v ? i : -1).filter(i => i >= 0); if (e.length === 1) correct = e[0]; }
+    out.push({ text: q.text.trim(), options: q.options.map(o => o.trim()), correct, color: 0, explain: q.explain.trim() }); });
+  return out;
+}
+function splitOpts(line, startIdx) {
+  const re = /(^|\s)([\u0001\u0002*]*)\s*([A-F])\s*[.)]\s*/g; const ms = []; let m; let expect = startIdx;
+  while ((m = re.exec(line))) { const li = 'ABCDEF'.indexOf(m[3]); if (li === expect) { ms.push({ at: m.index + m[1].length, end: re.lastIndex, star: m[2].includes('*'), pre: m[2] }); expect++; } }
+  if (!ms.length) return { head: null, opts: [] };
+  const em = []; let on = false; for (let i = 0; i < line.length; i++) { if (line[i] === '\u0001') on = true; else if (line[i] === '\u0002') on = false; em.push(on); }
+  const opts = ms.map((x, i) => { const endAt = i + 1 < ms.length ? ms[i + 1].at : line.length; let raw = line.slice(x.end, endAt); let n = 0, e = 0; for (let j = x.end; j < endAt; j++) { if (/\s|[\u0001\u0002]/.test(line[j])) continue; n++; if (em[j]) e++; }
+    const letterEm = em[x.at + x.pre.length] || /\u0001/.test(x.pre); let txt = strip(raw).trim(); let mark = false; if (/\(\s*đúng\s*\)$|[✓✔√]$/i.test(txt)) { mark = true; txt = txt.replace(/\s*(\(\s*đúng\s*\)|[✓✔√])$/i, ''); }
+    return { text: txt, star: x.star || mark, em: (n && e / n >= 0.6) || letterEm }; });
+  return { head: line.slice(0, ms[0].at), opts };
+}
+function addOpts(q, opts) { opts.forEach(o => { q.options.push(o.text); q.star.push(o.star); q.em.push(o.em); }); const n = q.em.length; if (q.em.every(Boolean)) q.em = q.em.map(() => false); }
+async function fileToText(f) {
+  const ext = f.name.split('.').pop().toLowerCase(); const buf = await f.arrayBuffer();
+  if (ext === 'docx') { await loadScript('lib/mammoth.browser.min.js'); const r = await mammoth.convertToHtml({ arrayBuffer: buf }, { styleMap: ['u => u'] }); const div = document.createElement('div'); div.innerHTML = r.value;
+    const walk = (n, em) => { let s = ''; n.childNodes.forEach(c => { if (c.nodeType === 3) s += em ? '\u0001' + c.textContent + '\u0002' : c.textContent; else if (c.nodeType === 1) { const tag = c.tagName; const e2 = em || tag === 'STRONG' || tag === 'B' || tag === 'U'; if (tag === 'BR') s += '\n'; else if (tag === 'TABLE') { c.querySelectorAll('tr').forEach(tr => { s += [...tr.children].map(td => walk(td, e2)).join('   ') + '\n'; }); } else if (/^(P|H\d|LI|DIV)$/.test(tag)) s += walk(c, e2) + '\n'; else s += walk(c, e2); } }); return s; };
+    return walk(div, false); }
+  if (ext === 'pdf') { await loadScript('lib/pdf.worker.min.js'); await loadScript('lib/pdf.min.js'); const pdf = await pdfjsLib.getDocument({ data: buf, isEvalSupported: false }).promise; let out = '';
+    for (let p = 1; p <= pdf.numPages; p++) { const pg = await pdf.getPage(p); const tc = await pg.getTextContent(); const rows = {}; tc.items.forEach(it => { const y = Math.round(it.transform[5] / 3); (rows[y] = rows[y] || []).push(it); }); Object.keys(rows).map(Number).sort((a, b) => b - a).forEach(y => { out += rows[y].sort((a, b) => a.transform[4] - b.transform[4]).map(i => i.str).join(' ').replace(/\s+/g, ' ') + '\n'; }); }
+    return out; }
+  return new TextDecoder('utf-8').decode(buf);
+}
+function colorFromName(s) { s = String(s || '').toLowerCase().trim(); if (!s) return null; const i = PALETTE.findIndex(p => p.name === s || p.key === s); if (i >= 0) return i; if (/dương|blue|lam/.test(s)) return 1; if (/lá|green/.test(s)) return 2; if (/đỏ|red/.test(s)) return 0; const j = PALETTE.findIndex(p => s.includes(p.name)); return j >= 0 ? j : null; }
+async function sheetToQuestions(f) { await loadScript('lib/xlsx.core.min.js'); const wb = XLSX.read(await f.arrayBuffer(), { type: 'array' }); const rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, defval: '' });
+  let hi = rows.findIndex(r => r.some(c => /câu\s*hỏi|question|nội\s*dung/i.test(String(c)))); let map = { q: 0, o: [1, 2, 3, 4], a: 5, e: 6, c: 7 };
+  if (hi >= 0) { const h = rows[hi].map(c => String(c).trim().toLowerCase()); const f2 = re => h.findIndex(c => re.test(c)); map.q = f2(/câu\s*hỏi|question|nội\s*dung/); map.o = ['a', 'b', 'c', 'd', 'e', 'f'].map(l => h.findIndex(c => c === l || c === 'phương án ' + l || c === 'pa ' + l || c === 'option ' + l)).filter(i => i >= 0); map.a = f2(/đáp\s*án|answer|đúng/); map.e = f2(/giải\s*thích|lời\s*giải|explain/); map.c = f2(/màu|color/); }
+  const out = []; rows.slice(hi + 1).forEach(r => { const text = String(r[map.q] || '').trim(); const opts = map.o.map(i => String(r[i] == null ? '' : r[i]).trim()); while (opts.length && !opts[opts.length - 1]) opts.pop(); if (!text || opts.length < 2) return;
+    let a = String(map.a >= 0 ? r[map.a] : '').trim().toUpperCase(); let correct = 'ABCDEF'.indexOf(a.charAt(0)); if (a.length > 1 && !/^[A-F][.)]?$/.test(a)) { const k = opts.findIndex(o => o.toUpperCase() === a); correct = k; } if (/^[1-6]$/.test(a)) correct = +a - 1;
+    const c = map.c >= 0 ? colorFromName(r[map.c]) : null; out.push({ text, options: opts, correct, color: c == null ? 0 : c, explain: String(map.e >= 0 ? r[map.e] : '').trim(), _c: c != null }); });
+  return out; }
+function openImport(title, desc, text) { $('#impTitle').textContent = title; $('#impDesc').textContent = desc; $('#impText').value = text || ''; showImpMsg(); $('#dImp').classList.add('on'); }
+function showImpMsg(qs) { qs = qs || parseQuestionsText($('#impText').value); const na = qs.filter(q => q.correct < 0).length;
+  $('#impMsg').innerHTML = qs.length ? `<div class="warn okmsg">Tìm thấy <b>${qs.length}</b> câu hỏi${na ? `; <b>${na}</b> câu chưa nhận ra đáp án đúng (chọn sau, hoặc bấm “✨ Nhờ AI đọc”)` : ', đủ đáp án'}.</div>` : `<div class="warn">Chưa nhận ra câu hỏi nào. Kiểm tra định dạng (❔ Định dạng) hoặc bấm “✨ Nhờ AI đọc”.</div>`; return qs; }
+$('#impText').oninput = () => { impSheet = null; showImpMsg(); };
+function applyQs(qs, mode) { if (!qs.length) { toast('Không có câu hỏi để thêm.'); return; } const anyColor = qs.some(q => q._c); qs.forEach(q => delete q._c); if (st.autoRand) randomizeAnswers(qs);
+  st.questions = mode === 'append' ? st.questions.concat(qs) : qs; if (!anyColor) st.autoColor = true; renderQList(); persist(); recompute(); $$('.modal').forEach(m => m.classList.remove('on')); toast(`Đã ${mode === 'append' ? 'thêm' : 'nhập'} ${qs.length} câu hỏi.`); }
+$('#impReplace').onclick = () => applyQs(impSheet || parseQuestionsText($('#impText').value), 'replace');
+$('#impAppend').onclick = () => applyQs(impSheet || parseQuestionsText($('#impText').value), 'append');
+let impSheet = null;
+$('#bPaste').onclick = () => { impSheet = null; openImport('Dán văn bản câu hỏi', 'Dán đề trắc nghiệm (copy từ Word, web…). App tự nhận câu hỏi, phương án và đáp án.', ''); };
+$('#bImport').onclick = () => $('#fImport').click();
+$('#fImport').onchange = async e => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; impSheet = null; try {
+  const ext = f.name.split('.').pop().toLowerCase();
+  if (['xlsx', 'xls', 'csv'].includes(ext)) { const sq = await sheetToQuestions(f); impSheet = sq; openImport('Nhập từ ' + f.name, 'Dữ liệu bảng tính đã đọc. Có thể thay thế hoặc thêm vào danh sách.', sq.map((q, i) => `Câu ${i + 1}. ${q.text}\n${q.options.map((o, k) => `${LET[k]}. ${o}`).join('\n')}\nĐáp án: ${q.correct >= 0 ? LET[q.correct] : '?'}${q.explain ? '\nGiải thích: ' + q.explain : ''}`).join('\n\n'));
+    impSheet = sq; showImpMsg(sq); return; }
+  toast('Đang đọc file…'); const txt = await fileToText(f); const qs = parseQuestionsText(txt);
+  openImport('Nhập từ ' + f.name, 'Nội dung đã trích từ file (sửa trực tiếp được trước khi nhập).', strip(txt));
+  impSheet = qs.length ? qs : null; showImpMsg(qs);
+} catch (err) { console.error(err); toast('Không đọc được file: ' + err.message, 5000); } };
+$('#bTpl').onclick = async () => { await loadScript('lib/xlsx.core.min.js'); const aoa = [['Câu hỏi', 'A', 'B', 'C', 'D', 'Đáp án', 'Giải thích', 'Màu (tùy chọn)']].concat(SAMPLE_Q.map(q => [q.text, ...q.options, LET[q.correct], q.explain, PALETTE[q.color].name]));
+  const ws = XLSX.utils.aoa_to_sheet(aoa); ws['!cols'] = [{ wch: 60 }, { wch: 22 }, { wch: 22 }, { wch: 22 }, { wch: 22 }, { wch: 8 }, { wch: 40 }, { wch: 14 }]; const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'Câu hỏi');
+  const out = XLSX.write(wb, { bookType: 'xlsx', type: 'array' }); saveFile('BTBA_mau-cau-hoi.xlsx', new Blob([out], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })); };
+$('#bVerify').onclick = async () => { if (!st.questions.length) { toast('Chưa có câu hỏi.'); return; } const b = $('#bVerify'); b.disabled = true; const old = b.innerHTML; b.innerHTML = '<span class="spin"></span> AI đang giải lại từng câu…';
+  try { const r = await verifyQuestions(st.questions, null, '', ''); renderQList(); persist(); recompute(); toast(r, 7000); } catch (e) { toast(e.message || 'Không kiểm tra được (cần mở app trong Claude hoặc nhập khóa API).', 6000); }
+  b.disabled = false; b.innerHTML = old; };
+$('#bFmt').onclick = () => $('#dFmt').classList.add('on');
+$$('[data-close]').forEach(b => b.onclick = () => b.closest('.modal').classList.remove('on'));
+
+/* ============ AI ============ */
+function fixBs(s) { return s.replace(/\\(\\|[a-zA-Z]{2,}|[\s\S])/g, (m, g) => g === '\\' ? m : g.length >= 2 ? '\\\\' + g : ('"/bfnrtu'.includes(g) ? m : '\\\\' + g)); }
+function parseJSON(t) { t = String(t || '').replace(/```json|```/g, ''); try { const a0 = t.indexOf('{'), b0 = t.lastIndexOf('}'); if (a0 >= 0) return JSON.parse(fixBs(t.slice(a0, b0 + 1))); } catch (e) {} const a = t.indexOf('{'), b = t.lastIndexOf('}'); const a2 = t.indexOf('['), b2 = t.lastIndexOf(']'); let o = null; try { if (a >= 0 && (a2 < 0 || a < a2)) o = JSON.parse(t.slice(a, b + 1)); else o = { questions: JSON.parse(t.slice(a2, b2 + 1)) }; } catch (e) { return null; } return o; }
+function normAI(arr) { return (arr || []).map(q => { const opts = (q.options || q.choices || []).map(o => String(o).replace(/^\s*[A-F]\s*[.)]\s*/, '').trim()).slice(0, 6); let a = q.answer != null ? q.answer : q.correct; let c = typeof a === 'number' ? a : 'ABCDEF'.indexOf(String(a).trim().toUpperCase().charAt(0)); if (c < 0 || c >= opts.length) { const k = opts.indexOf(String(a)); c = k; } return { text: String(q.question || q.text || '').trim(), options: opts, correct: c, color: 0, explain: String(q.explanation || q.explain || '').trim() }; }).filter(q => q.text && q.options.length >= 2); }
+function getKey() { try { return localStorage.getItem('gmbt-key') || ''; } catch (e) { return ''; } }
+function getModel() { try { return localStorage.getItem('gmbt-model') || 'claude-sonnet-5-5'; } catch (e) { return 'claude-sonnet-5-5'; } }
+async function askClaude(prompt, msgEl, tier) {
+  const busyMsg = n => { if (msgEl) msgEl.innerHTML = `<div class="warn okmsg"><span class="spin" style="border-color:#1d6b33;border-top-color:transparent"></span> AI đang soạn…${n ? ` (${n} ký tự)` : ''}</div>`; };
+  const sample = await cap('sample');
+  if (sample) { const r = await sample(prompt, { modelTier: tier || 'default', onText: ({ text }) => busyMsg(text.length) }); return r.text; }
+  const key = getKey(); if (!key) throw { message: 'Chưa có khóa API. Mở “✨ Tạo bằng AI”, nhập khóa API Anthropic ở mục “Kết nối AI” rồi thử lại.' };
+  busyMsg(0);
+  const res = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+    body: JSON.stringify({ model: getModel(), max_tokens: 12000, messages: [{ role: 'user', content: prompt }] }) }).catch(e => { throw { message: 'Không kết nối được tới AI (kiểm tra mạng Internet).' }; });
+  const j = await res.json().catch(() => ({}));
+  if (!res.ok) throw { message: res.status === 401 ? 'Khóa API không hợp lệ.' : 'Lỗi AI: ' + ((j.error && j.error.message) || res.status) };
+  return (j.content || []).map(c => c.text || '').join(''); }
+const MATH_RULE = () => $('#aiLatex') && !$('#aiLatex').checked ? 'Viết công thức bằng ký tự Unicode thường (ví dụ m/h², ×, ÷, √, °C), không dùng LaTeX.' : 'MỌI biểu thức toán, công thức Vật lí, kí hiệu, đơn vị có số mũ, phương trình/công thức Hóa học PHẢI viết bằng LaTeX đặt trong cặp dấu $...$, ví dụ: $\\frac{a}{b}$, $x^{2}+2x-3=0$, $\\sqrt{2}$, $v=\\frac{s}{t}$, $30^{\\circ}$, $\\Delta ABC$, $\\vec{F}$, $\\ce{2H2 + O2 -> 2H2O}$, $\\ce{H2SO4}$, $9{,}8\\ \\text{m/s}^{2}$. Số thập phân trong công thức dùng dấu phẩy dạng {,} (ví dụ $1{,}5$). Chữ tiếng Việt luôn để NGOÀI dấu $. Trong chuỗi JSON nhớ nhân đôi dấu gạch chéo ngược (\\\\frac).';
+let aiMode = 'replace';
+/* ---- kiểm tra cục bộ ---- */
+function localIssues(q) { const out = []; const nrm = t => String(t || '').toLowerCase().replace(/\s+/g, ' ').replace(/[.。]$/, '').trim();
+  if (!String(q.text || '').trim()) out.push('thiếu nội dung câu hỏi'); if (q.options.length < 2) out.push('ít hơn 2 phương án'); if (q.options.some(o => !String(o).trim())) out.push('có phương án trống');
+  const seen = {}; q.options.forEach((o, i) => { const k = nrm(o); if (k && seen[k] != null) out.push(`phương án ${LET[seen[k]]} và ${LET[i]} trùng nhau`); seen[k] = i; });
+  if (q.correct < 0 || q.correct >= q.options.length) out.push('chưa chọn đáp án đúng');
+  [q.text, q.explain, ...q.options].forEach(t => { const n = (String(t || '').match(/(?<!\\)\$/g) || []).length; if (n % 2) out.push('thiếu dấu $ đóng/mở công thức'); E.mathList(t).forEach(tx => { const mi = mathCache.get(tx); if (mi && mi.err) out.push('công thức lỗi: ' + tx.slice(0, 30)); }); });
+  return [...new Set(out)]; }
+/* ---- AI kiểm tra kiến thức: giải độc lập, đối chiếu, sửa ---- */
+async function verifyQuestions(qs, msgEl, subj, grade) {
+  const payload = qs.map((q, i) => ({ i: i + 1, question: q.text, options: q.options, answer: q.correct >= 0 ? LET[q.correct] : null, explanation: q.explain || '' }));
+  const prompt = `Bạn là chuyên gia thẩm định đề kiểm tra (giáo viên giỏi Toán và Khoa học tự nhiên), cực kì cẩn thận. ${subj ? 'Môn: ' + subj + '. ' : ''}${grade ? 'Lớp: ' + grade + '. ' : ''}
+Với TỪNG câu trắc nghiệm dưới đây, hãy:
+1) Tự giải độc lập từng bước (tính toán lại chính xác, kiểm tra đơn vị, đổi đơn vị) và tự xác định phương án đúng mà KHÔNG dựa vào đáp án đã cho.
+2) Đối chiếu với đáp án đã cho. Kiểm tra: kiến thức có chính xác theo SGK GDPT 2018 không; có đúng DUY NHẤT một phương án đúng không; phương án nhiễu có vô tình đúng không; đề có mơ hồ, thiếu dữ kiện không; công thức LaTeX có viết đúng không; lời giải thích có đúng không.
+3) Nếu mọi thứ đúng: status "ok". Nếu có lỗi sửa được: status "fixed" và đưa bản đã sửa (giữ nguyên ý câu hỏi, chỉnh tối thiểu; nếu đáp án đã cho sai thì sửa "answer"; nếu có 2 đáp án đúng thì sửa phương án nhiễu). Nếu không chắc chắn: status "review" và nêu lí do.
+Giữ định dạng công thức LaTeX trong $...$ (nhân đôi dấu \\\\ trong JSON), chữ tiếng Việt ngoài dấu $.
+Chỉ trả về JSON hợp lệ dạng: {"results":[{"i":1,"status":"ok|fixed|review","solved_answer":"A","note":"nhận xét ngắn bằng tiếng Việt","fixed":{"question":"...","options":["...","...","...","..."],"answer":"B","explanation":"..."}}]}
+Các câu hỏi:
+${JSON.stringify(payload)}`;
+  const t = await askClaude(prompt, msgEl, 'complex'); const o = parseJSON(t); const res = (o && o.results) || []; let ok = 0, fixed = 0, review = 0;
+  res.forEach(r => { const q = qs[(r.i | 0) - 1]; if (!q) return; const st2 = String(r.status || '').toLowerCase();
+    if (st2 === 'fixed' && r.fixed) { const f = normAI([r.fixed])[0]; if (f && f.options.length >= 2 && f.correct >= 0) { q.text = f.text; q.options = f.options; q.correct = f.correct; if (f.explain) q.explain = f.explain; q.vstate = 'fixed'; q.vnote = r.note || 'Đã được AI sửa.'; fixed++; return; } }
+    if (st2 === 'ok') { const sa = 'ABCDEF'.indexOf(String(r.solved_answer || '').toUpperCase().charAt(0)); if (sa >= 0 && sa !== q.correct) { q.vstate = 'review'; q.vnote = `AI tự giải ra ${LET[sa]} nhưng đáp án đang là ${LET[q.correct]} – cần xem lại.`; review++; } else { q.vstate = 'ok'; q.vnote = r.note || ''; ok++; } return; }
+    q.vstate = 'review'; q.vnote = r.note || 'Cần giáo viên xem lại.'; review++; });
+  return `Kiểm tra kiến thức: ✔ ${ok} câu đúng${fixed ? `, ✎ đã sửa ${fixed} câu` : ''}${review ? `, ⚠ ${review} câu cần xem lại` : ''}.`; }
+
+$$('#aiAppend button').forEach(b => b.onclick = () => { aiMode = b.dataset.a; $$('#aiAppend button').forEach(x => x.classList.toggle('on', x === b)); });
+$('#bAI').onclick = () => { $('#dAI').classList.add('on'); $('#aiMsg').innerHTML = ''; cap('sample').then(s => { $('#aiKeyBox').style.display = s ? 'none' : ''; $('#aiKey').value = getKey(); $('#aiModel').value = getModel(); }); };
+$('#aiKey').oninput = e => { try { localStorage.setItem('gmbt-key', e.target.value.trim()); } catch (x) {} };
+$('#aiModel').onchange = e => { try { localStorage.setItem('gmbt-model', e.target.value); } catch (x) {} };
+$('#fAISrc').onchange = async e => { const f = e.target.files[0]; if (!f) return; try { const t = await fileToText(f); $('#aiSrc').value = strip(t).slice(0, 40000); toast('Đã đọc tài liệu nguồn.'); } catch (err) { toast('Không đọc được file: ' + err.message); } };
+$('#aiGo').onclick = async () => { const n = Math.max(1, Math.min(30, +$('#aiN').value || 5)); const topic = $('#aiTopic').value.trim(); const src = $('#aiSrc').value.trim();
+  if (!topic && !src) { $('#aiMsg').innerHTML = '<div class="warn">Nhập chủ đề hoặc tài liệu nguồn.</div>'; return; }
+  const btn = $('#aiGo'); btn.disabled = true; const msg = $('#aiMsg'); msg.innerHTML = '<div class="warn okmsg">Đang gửi yêu cầu…</div>';
+  const want = $('#aiHidden').checked;
+  const prompt = `Bạn là giáo viên Việt Nam giỏi soạn đề. Hãy soạn đúng ${n} câu hỏi trắc nghiệm bằng tiếng Việt, mỗi câu có 4 phương án A, B, C, D và chỉ 1 phương án đúng.
+Môn: ${$('#aiSubj').value || '(không nêu)'}; ${$('#aiContent').value.trim() ? 'Nội dung kiến thức cần hỏi: ' + $('#aiContent').value.trim() + ';' : ''} Lớp: ${$('#aiGrade').value || '(không nêu)'}; Chủ đề: ${topic || '(theo tài liệu)'}; Mức độ: ${$('#aiLvl').value}. ${$('#aiNote').value ? 'Yêu cầu thêm: ' + $('#aiNote').value : ''}
+Quy tắc: nội dung PHẢI chính xác tuyệt đối về khoa học, đúng chương trình GDPT 2018 và SGK hiện hành (Kết nối tri thức, Chân trời sáng tạo, Cánh diều); với câu tính toán hãy tự giải cẩn thận từng bước trước khi chọn đáp án và kiểm tra lại kết quả; đơn vị đo theo hệ SI, dùng dấu phẩy thập phân kiểu Việt Nam; mỗi câu chỉ có DUY NHẤT một phương án đúng, các phương án nhiễu phải sai rõ ràng (không mơ hồ, không có 2 đáp án cùng đúng); không dùng kiến thức vượt lớp; câu hỏi ngắn gọn (dưới 45 từ), mỗi phương án ngắn (dưới 18 từ), các phương án nhiễu hợp lý; đáp án đúng phân bố ngẫu nhiên giữa A–D; mỗi câu có 1 câu giải thích ngắn. ${MATH_RULE()} Không ghi chữ cái A./B. ở đầu phương án.
+${want ? 'Đồng thời đề xuất "hidden_text": một từ hoặc cụm từ tiếng Việt có dấu, IN HOA, liên quan chủ đề, tối đa 3 từ và tổng không quá 12 chữ cái, để làm bức tranh ẩn.' : ''}
+${src ? 'Dựa vào tài liệu sau:\n<<<\n' + src.slice(0, 30000) + '\n>>>' : ''}
+Chỉ trả về một JSON hợp lệ, không thêm chữ nào khác, dạng: {"hidden_text":"...","questions":[{"question":"...","options":["...","...","...","..."],"answer":"A","explanation":"..."}]}`;
+  try { const t = await askClaude(prompt, msg); const o = parseJSON(t); let qs = o ? normAI(o.questions) : [];
+    if (!qs.length) throw { message: 'AI trả về không đúng định dạng, hãy thử lại.' };
+    if ($('#aiVerify').checked) { msg.innerHTML = '<div class="warn okmsg"><span class="spin" style="border-color:#1d6b33;border-top-color:transparent"></span> AI đang tự giải lại từng câu để kiểm tra độ chính xác…</div>'; try { const rep2 = await verifyQuestions(qs, msg, $('#aiSubj').value, $('#aiGrade').value); toast(rep2, 6000); } catch (e) { console.warn(e); } }
+    if (want && o.hidden_text && aiMode === 'replace') { setHiddenText(o.hidden_text); }
+    applyQs(qs, aiMode); if (want && o.hidden_text) toast(`Đã tạo ${qs.length} câu. Chữ ẩn gợi ý: ${o.hidden_text}`, 5000);
+  } catch (e) { msg.innerHTML = `<div class="warn err">${escH(e.message || e.code || e)}</div>`; }
+  btn.disabled = false; };
+function setHiddenText(t) { t = String(t).toUpperCase().normalize('NFC').trim(); const ws = t.split(/\s+/); let text = t; if (ws.length >= 2 && t.replace(/\s/g, '').length > 7) { let best = 1, bd = 1e9; for (let i = 1; i < ws.length; i++) { const d = Math.abs(ws.slice(0, i).join(' ').length - ws.slice(i).join(' ').length); if (d < bd) { bd = d; best = i; } } text = ws.slice(0, best).join(' ') + '\n' + ws.slice(best).join(' '); }
+  st.pic.mode = 'text'; st.pic.text = text; st.pic.wordColors = ws.map((_, i) => CYCLE[i % CYCLE.length]); st.meta.pictureName = ''; st.maskEdit = null; syncPicUI(); syncMetaUI(); }
+$('#impAI').onclick = async () => { const txt = strip($('#impText').value).trim(); if (!txt) { $('#impMsg').innerHTML = '<div class="warn">Chưa có nội dung.</div>'; return; } const b = $('#impAI'); b.disabled = true;
+  const prompt = `Trích xuất TẤT CẢ câu hỏi trắc nghiệm trong văn bản dưới đây. Giữ nguyên nội dung câu hỏi và phương án (bỏ chữ cái A./B. ở đầu). Nếu văn bản có đáp án thì dùng đáp án đó; nếu không có, hãy tự xác định đáp án đúng và viết giải thích ngắn. ${MATH_RULE()}
+Chỉ trả về JSON hợp lệ dạng {"questions":[{"question":"...","options":["...","..."],"answer":"A","explanation":"..."}]}
+<<<
+${txt.slice(0, 40000)}
+>>>`;
+  try { const t = await askClaude(prompt, $('#impMsg')); const o = parseJSON(t); const qs = o ? normAI(o.questions) : []; if (!qs.length) throw { message: 'AI không trích được câu hỏi.' }; impSheet = qs; $('#impMsg').innerHTML = `<div class="warn okmsg">AI đã trích <b>${qs.length}</b> câu hỏi. Bấm “Thay thế danh sách” hoặc “Thêm vào cuối”.</div>`; }
+  catch (e) { $('#impMsg').innerHTML = `<div class="warn err">${escH(e.message || e)}</div>`; } b.disabled = false; };
+
+/* ============ XUẤT FILE ============ */
+function baseName() { const n = (currentPics() || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); return 'BTBA_' + (n || 'buc-tranh'); }
+async function busyBtn(btn, fn) { const t = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spin"></span> Đang tạo…'; try { await fn(); } catch (e) { console.error(e); toast('Lỗi khi xuất: ' + (e.message || e), 6000); } btn.disabled = false; btn.innerHTML = t; }
+function exportCheck() { if (!cur.part) { toast('Chưa có dữ liệu.'); return false; } if (allTex().some(t => !mathCache.has(t))) { ensureMath(); toast('Đang dựng công thức, thử lại sau 1–2 giây…'); return false; } return true; }
+$('#bPPT').onclick = () => { if (!exportCheck()) return; busyBtn($('#bPPT'), async () => { await loadScript('lib/pptxgen.bundle.js'); const ds = docState(); const pptx = new PptxGenJS(); const land = st.meta.orientation === 'landscape';
+  const PGp = E.pageGeom(st.meta.orientation, st.meta.paper); pptx.defineLayout({ name: 'PAGE', width: +(PGp.W / 25.4).toFixed(3), height: +(PGp.H / 25.4).toFixed(3) }); pptx.layout = 'PAGE'; pptx.title = 'BỨC TRANH BÍ ẨN - Ms. Hằng Đỗ'; pptx.author = 'Ms. Hằng Đỗ';
+  const pS = E.layoutDoc(ds, false), pA = E.layoutDoc(ds, true); const pG = st.meta.includeGuide !== false ? E.guideDoc(ds) : []; await mathPngs(pS.concat(pA)); E.pptSlides(pptx, pS, cur.part); E.pptSlides(pptx, pA, cur.part); if (pG.length) E.pptSlides(pptx, pG, cur.part);
+  const blob = await pptx.write({ outputType: 'blob' }); await saveFile(baseName() + '.pptx', blob); }); };
+$('#bPDF').onclick = e => { e.stopPropagation(); $('#gameMenu').classList.remove('on'); $('#pdfMenu').classList.toggle('on'); };
+$('#bGame').onclick = e => { e.stopPropagation(); $('#pdfMenu').classList.remove('on'); $('#gameMenu').classList.toggle('on'); };
+document.addEventListener('click', () => $('#gameMenu').classList.remove('on'));
+function gameFills() { const T = E.makeTheme(Object.assign({}, docState(), { meta: Object.assign({}, st.meta, { printMode: 'color' }) })); return T.fill; }
+function picSvgState(onlyQ, pxW) { const part = cur.part; const geo = E.pageGeom(st.meta.orientation, st.meta.paper).pic; const s = Math.min(geo.w / part.W, geo.h / part.H); const w = part.W * s + 2, h = part.H * s + 2;
+  const svg = E.svgPage({ w, h, items: [{ t: 'picture', x: 1, y: 1, w: w - 2, h: h - 2, answer: true, fills: gameFills(), onlyQ }] }, part); const pxH = Math.round(pxW * h / w); return { svg: svg.replace('width="100%"', `width="${pxW}" height="${pxH}"`), pxW, pxH }; }
+async function svgToPng(o) { const im = await loadImg(svgDataUrl(o.svg)); const c = document.createElement('canvas'); c.width = o.pxW; c.height = o.pxH; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(im, 0, 0, c.width, c.height); return c.toDataURL('image/png'); }
+async function prepGameMath() { const items = []; allTex().forEach(t => { const mi = mathCache.get(t); if (mi) ['#1B2230'].forEach(color => items.push({ tex: t, color, mi, w: mi.w * 20 * E.PT, h: (mi.asc + mi.desc) * 20 * E.PT })); });
+  const map = new Map(); for (const it of items) { const pxW = Math.max(4, Math.round(it.w / 25.4 * 500)), pxH = Math.max(4, Math.round(it.h / 25.4 * 500)); const im = await loadImg(svgDataUrl(E.mathSvgString(it.mi, it.color, pxW, pxH))); const c = document.createElement('canvas'); c.width = pxW; c.height = pxH; c.getContext('2d').drawImage(im, 0, 0, pxW, pxH); map.set(it.tex + '|' + it.color, c.toDataURL('image/png')); }
+  return (tex, color) => map.get(tex + '|' + color) || map.get(tex + '|#1B2230'); }
+const APP_URL_DEFAULT = 'https://do-hang.github.io/buc-tranh-bi-an/'; const APP_URL_FALLBACK = 'https://claude.ai/artifact/PTfuCGxXALr92PmN9HBWnt';
+function appBase() { let v = ''; try { v = localStorage.getItem('btba-base') || ''; } catch (e) {} v = (v || APP_URL_DEFAULT).trim(); return /^https:\/\//.test(v) ? v.split('#')[0] : APP_URL_DEFAULT; }
+const PIC_KEYS = ['mode', 'text', 'case', 'wordColors', 'font', 'fit', 'stretch', 'thick', 'spacing', 'autoWrap', 'lineGap', 'imgSrc', 'emoji', 'conv', 'bgRemove', 'bgTol', 'thr', 'thrAuto', 'k', 'invert', 'keepDetail', 'clusterMap', 'imgThick', 'comboOrder', 'comboRatio', 'cols', 'bgSize', 'fgSize', 'labSize', 'seed'];
+let linkMode = 'instant', linkLong = '';
+function needMaskInLink() { const p = st.pic; if (st.maskEdit) return true; if (p.mode === 'text') return false; if (p.imgSrc === 'upload' || p.imgSrc === 'ai') return true; return !String(p.emoji || '').startsWith('shape:'); }
+async function buildLink(mode) { const ds = docState(); const pic = {}; PIC_KEYS.forEach(k => { if (st.pic[k] !== undefined) pic[k] = st.pic[k]; });
+  const useSheet = st.meta.useSheet && /^https:\/\/script\.google(usercontent)?\.com\//.test(st.meta.sheetUrl || '');
+  const obj = { v: 2, md: mode, an: st.meta.askName !== false, sh: useSheet ? st.meta.sheetUrl : '', meta: { title: st.meta.title, subtitle: st.meta.subtitle || '', pictureName: ds.meta.pictureName || '', accent: st.meta.accent, orientation: st.meta.orientation, paper: st.meta.paper }, pic, pal: st.palette || {},
+    q: st.questions.map(q => [q.text, q.options, q.correct, q.color, q.explain || '']) };
+  const mk = needMaskInLink() ? window.GMBT_LINK.rleEnc(cur.mask, 2) : null; if (mk) obj.mk = 1;
+  return appBase() + '#' + await window.GMBT_LINK.packObj(obj, mk); }
+function drawQR(text) { const box = $('#lkQR'); box.innerHTML = ''; box._c = null; $('#lkQRsave').style.display = 'none'; if (!window.qrcode) return;
+  if (text.length > 2900) { box.innerHTML = '<div class="warn">Link còn dài nên chưa tạo được mã QR rõ nét – hãy rút gọn link ở bước trên.</div>'; return; }
+  const qr = qrcode(0, text.length < 300 ? 'M' : 'L'); qr.addData(text); qr.make(); const n = qr.getModuleCount(), sc = Math.max(3, Math.floor(600 / n)); const c = document.createElement('canvas'); c.width = c.height = (n + 8) * sc; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.fillStyle = '#000';
+  for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (qr.isDark(r, k)) x.fillRect((k + 4) * sc, (r + 4) * sc, sc, sc); c.style.width = '230px'; c.style.imageRendering = 'pixelated'; box.appendChild(c); box._c = c; $('#lkQRsave').style.display = '';
+  if (n > 81) box.insertAdjacentHTML('beforeend', '<div class="small">Mã QR khá dày – hãy rút gọn link để có mã QR thưa, dễ quét.</div>'); }
+async function tryShorten(url) { // bản cài: tự rút gọn qua TinyURL / is.gd; bản web: trả về null
+  if (window.btbaNative && window.btbaNative.shorten) { try { const r = await window.btbaNative.shorten(url); if (/^https?:\/\/\S+$/.test(r || '')) return r; } catch (e) { console.warn(e); } }
+  try { const r = await fetch('https://tinyurl.com/api-create.php?url=' + encodeURIComponent(url)); const t = (await r.text()).trim(); if (/^https?:\/\/\S+$/.test(t)) return t; } catch (e) {}
+  return null; }
+function showLink(url, short) { $('#lkText').value = short || url; $('#lkOpen').href = short || url; $('#lkShortBox').style.display = short ? 'none' : '';
+  $('#lkInfo').innerHTML = (short ? `✅ Link đã rút gọn (${short.length} ký tự)` : `Link đầy đủ: ${url.length} ký tự`) + ` · ${linkMode === 'final' ? 'Bản 2 – chấm điểm cuối' : 'Bản 1 – phản hồi ngay'}${st.meta.askName !== false ? ' · học sinh nhập tên' : ''}${st.meta.useSheet && st.meta.sheetUrl ? ' · ghi kết quả vào Google Sheet' : ''}.`;
+  $('#lkTiny').href = 'https://tinyurl.com/api-create.php?url=' + encodeURIComponent(url); drawQR(short || url); }
+async function makeLink(mode) { linkMode = mode || linkMode; $('#dLink').classList.add('on'); syncLinkOpts(); $('#lkText').value = 'Đang tạo link…'; $('#lkInfo').textContent = ''; $('#lkShort').value = '';
+  await loadScript('lib/qrcode.js'); linkLong = await buildLink(linkMode); showLink(linkLong, null);
+  $('#lkInfo').insertAdjacentHTML('beforeend', ' <span class="small">⏳ đang rút gọn…</span>'); const sh = await tryShorten(linkLong); showLink(linkLong, sh); }
+function syncLinkOpts() { $('#lkBase').value = appBase(); $('#lkAsk').checked = st.meta.askName !== false; $('#lkUseSheet').checked = !!st.meta.useSheet; $('#lkSheet').value = st.meta.sheetUrl || ''; $('#lkSheetBox').style.display = st.meta.useSheet ? '' : 'none'; $$('#lkMode button').forEach(b => b.classList.toggle('on', b.dataset.m === linkMode)); }
+const relink = (() => { let t; return () => { clearTimeout(t); t = setTimeout(() => makeLink(), 500); }; })();
+$('#lkBase').onchange = e => { try { localStorage.setItem('btba-base', e.target.value.trim()); } catch (er) {} relink(); };
+$('#lkAsk').onchange = e => { st.meta.askName = e.target.checked; persist(); relink(); };
+$('#lkUseSheet').onchange = e => { st.meta.useSheet = e.target.checked; $('#lkSheetBox').style.display = e.target.checked ? '' : 'none'; persist(); relink(); };
+$('#lkSheet').oninput = e => { st.meta.sheetUrl = e.target.value.trim(); $('#lkSheetOk').innerHTML = !st.meta.sheetUrl ? '' : /^https:\/\/script\.google(usercontent)?\.com\/.+\/exec/.test(st.meta.sheetUrl) ? '<span style="color:#1d6b33">✔ Đúng dạng link Web App</span>' : '<span style="color:#b42318">Link phải có dạng https://script.google.com/macros/s/…/exec</span>'; persist(); relink(); };
+$$('#lkMode button').forEach(b => b.onclick = () => { linkMode = b.dataset.m; makeLink(); });
+$('#lkShort').oninput = e => { const v = e.target.value.trim(); if (/^https?:\/\/\S+$/.test(v)) { $('#lkText').value = v; $('#lkOpen').href = v; drawQR(v); $('#lkInfo').innerHTML = `✅ Đang dùng link rút gọn (${v.length} ký tự).`; } };
+$('#lkTest').onclick = () => { const u = (st.meta.sheetUrl || '').trim(); if (!u) { toast('Dán link Web App trước.'); return; } $('#lkTest').href = u + (u.includes('?') ? '&' : '?') + 'test=1'; };
+$('#lkGuide').onclick = () => { $('#gsCode').value = APPS_SCRIPT; $('#dGs').classList.add('on'); };
+$('#gsCopy').onclick = async () => { try { await navigator.clipboard.writeText(APPS_SCRIPT); toast('Đã sao chép mã Apps Script.'); } catch (e) { $('#gsCode').select(); try { document.execCommand('copy'); toast('Đã sao chép.'); } catch (e2) { toast('Bôi đen và nhấn Ctrl+C.'); } } };
+const APPS_SCRIPT = `/**
+ * BỨC TRANH BÍ ẨN – Ms. Hằng Đỗ
+ * Nhận kết quả game của học sinh và ghi vào Google Sheet này.
+ */
+const SHEET_NAME = 'Kết quả';
+const HEADERS = ['Thời gian nộp', 'Họ và tên', 'Lớp', 'Bức tranh / Game', 'Chế độ', 'Số câu đúng', 'Tổng số câu', 'Tỉ lệ đúng', 'Điểm', 'Thời gian làm', 'Số lần chọn sai', 'Đáp án đã chọn'];
+
+function doGet(e) { return handle_((e && e.parameter) || {}); }
+function doPost(e) {
+  let p = {};
+  try { p = JSON.parse(e.postData.contents); } catch (err) { p = (e && e.parameter) || {}; }
+  return handle_(p);
+}
+function sheet_() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sh = ss.getSheetByName(SHEET_NAME);
+  if (!sh) {
+    sh = ss.insertSheet(SHEET_NAME);
+    sh.appendRow(HEADERS);
+    sh.getRange(1, 1, 1, HEADERS.length).setFontWeight('bold').setBackground('#1F3A5F').setFontColor('#FFFFFF');
+    sh.setFrozenRows(1);
+    sh.setColumnWidth(2, 200); sh.setColumnWidth(4, 180); sh.setColumnWidth(12, 260);
+  }
+  return sh;
+}
+function handle_(p) {
+  const sh = sheet_();
+  if (p.test) return page_('✅ Kết nối thành công!', 'Google Sheet đã sẵn sàng nhận kết quả từ game BỨC TRANH BÍ ẨN.');
+  if (!p.name) return page_('BỨC TRANH BÍ ẨN', 'Web App đang hoạt động. Hãy dán link này vào ứng dụng.');
+  const right = Number(p.right || 0), total = Number(p.total || 0);
+  const lock = LockService.getScriptLock(); lock.waitLock(20000);
+  try {
+    sh.appendRow([new Date(), String(p.name).slice(0, 80), String(p.cls || '').slice(0, 20), String(p.game || '').slice(0, 80), p.mode || '', right, total, total ? right / total : 0, Number(p.score || 0), p.time || '', Number(p.wrong || 0), String(p.detail || '').slice(0, 300)]);
+    sh.getRange(sh.getLastRow(), 8).setNumberFormat('0%');
+  } finally { lock.releaseLock(); }
+  return page_('✅ Đã gửi kết quả!', esc_(p.name) + ' – đúng ' + right + '/' + total + ' câu. Em có thể đóng trang này.');
+}
+function esc_(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+function page_(t, m) {
+  return HtmlService.createHtmlOutput('<div style="font-family:Arial,sans-serif;text-align:center;padding:48px 16px"><div style="font-size:52px">🧩</div><h2 style="color:#1F3A5F">' + t + '</h2><p style="font-size:18px;color:#333">' + m + '</p></div>').setTitle('BỨC TRANH BÍ ẨN').addMetaTag('viewport', 'width=device-width, initial-scale=1');
+}`;
+$('#lkCopy').onclick = async () => { const t = $('#lkText'); try { await navigator.clipboard.writeText(t.value); toast('Đã sao chép link.'); } catch (e) { t.focus(); t.select(); try { document.execCommand('copy'); toast('Đã sao chép link.'); } catch (e2) { toast('Hãy bôi đen link và nhấn Ctrl+C.'); } } };
+$('#lkQRsave').onclick = () => { const c = $('#lkQR')._c; if (!c) return; c.toBlob(b => saveFile(baseName() + '_QR.png', b)); };
+$$('#gameMenu [data-game]').forEach(b => b.onclick = () => { $('#gameMenu').classList.remove('on'); if (!exportCheck()) return; if (!st.questions.length) { toast('Chưa có câu hỏi.'); return; } const kind = b.dataset.game;
+  busyBtn($('#bGame'), async () => { const ds = docState(); const GG = window.GMBT_GAME;
+    if (kind === 'link1' || kind === 'link2') { await makeLink(kind === 'link2' ? 'final' : 'instant'); return; }
+    if (kind === 'html' || kind === 'html2') { const PG = E.pageGeom(st.meta.orientation, st.meta.paper).pic; const cell = Math.min(PG.w / cur.part.W, PG.h / cur.part.H);
+      const data = GG.buildGameData(ds, cur.part, cell, t => mathCache.get(t) || null, gameFills()); data.askName = st.meta.askName !== false; data.sheet = st.meta.useSheet && st.meta.sheetUrl ? st.meta.sheetUrl : ''; const html = GG.gameHTML(data, kind === 'html2' ? 'final' : 'instant');
+      await saveFile(baseName() + (kind === 'html2' ? '_game-cham-diem-cuoi.html' : '_game-phan-hoi-ngay.html'), new Blob([html], { type: 'text/html' })); return; }
+    await loadScript('lib/pptxgen.bundle.js'); await loadScript('lib/jszip.min.js');
+    const pics = []; const N = st.questions.length; for (let k = 0; k <= N; k++) { const set = new Set(); for (let j = 0; j < k; j++) set.add(j); pics.push(await svgToPng(picSvgState(set, 1500))); }
+    const mp = await prepGameMath(); const pptx = new PptxGenJS(); pptx.title = 'BỨC TRANH BÍ ẨN – Game tương tác'; pptx.author = 'Ms. Hằng Đỗ';
+    const snd = await GG.buildPptGame(pptx, Object.assign({}, ds, { _fills: gameFills() }), cur.part, pics, mp);
+    let blob = await pptx.write({ outputType: 'blob' }); blob = await GG.noClickAdvance(blob, snd); await saveFile(baseName() + '_game.pptx', blob); }); });
+document.addEventListener('click', () => $('#pdfMenu').classList.remove('on'));
+$$('#pdfMenu [data-pdf]').forEach(b => b.onclick = () => { $('#pdfMenu').classList.remove('on'); if (!exportCheck()) return; const which = b.dataset.pdf; busyBtn($('#bPDF'), async () => { await loadScript('lib/jspdf.umd.min.js'); await loadScript('lib/svg2pdf.umd.min.js'); const ds = docState(); const land = st.meta.orientation === 'landscape';
+  const PGd = E.pageGeom(st.meta.orientation, st.meta.paper); const doc = new jspdf.jsPDF({ orientation: land ? 'landscape' : 'portrait', unit: 'mm', format: [PGd.W, PGd.H] }); E.pdfFonts(doc); let first = true;
+  if (which === 'both' || which === 'student') { await E.pdfPages(doc, E.layoutDoc(ds, false), cur.part, first); first = false; }
+  if (which === 'both' || which === 'answer') { await E.pdfPages(doc, E.layoutDoc(ds, true), cur.part, first); first = false; }
+  if (which === 'guide' || (which === 'both' && st.meta.includeGuide !== false)) { await E.pdfPages(doc, E.guideDoc(ds), cur.part, first); }
+  doc.setProperties({ title: 'BỨC TRANH BÍ ẨN - Ms. Hằng Đỗ', author: 'Ms. Hằng Đỗ' }); await saveFile(baseName() + (which === 'student' ? '_phieu-hoc-sinh' : which === 'answer' ? '_dap-an' : which === 'guide' ? '_huong-dan-gv' : '') + '.pdf', doc.output('blob')); }); });
+$('#bSave').onclick = () => saveFile(baseName() + '.json', new Blob([JSON.stringify(Object.assign({ app: 'buc-tranh-bi-an', v: 1 }, st))], { type: 'application/json' }));
+$('#bOpen').onclick = () => $('#fOpen').click();
+$('#fOpen').onchange = async e => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; try { st = migrate(JSON.parse(await f.text())); syncAll(); persist(); recompute(); toast('Đã mở dự án.'); } catch (err) { toast('File dự án không hợp lệ.'); } };
+
+function syncAll() { syncPicUI(); syncMetaUI(); renderQList(); }
+initMathBar();
+async function playV2(o, rest) {
+  const d = defaults(); st = migrate({ meta: Object.assign({}, d.meta, o.meta), pic: Object.assign({}, d.pic, o.pic), palette: o.pal || {}, autoColor: false, maskEdit: null,
+    questions: o.q.map(a => ({ text: a[0], options: a[1], correct: a[2], color: a[3], explain: a[4] })) });
+  E.applyPalette(st.palette); const { W, H } = E.gridDims(st.meta.orientation, st.pic.cols, st.meta.paper);
+  let mask; if (o.mk) { const r = window.GMBT_LINK.rleDec(rest, W * H, 2); mask = Int16Array.from(r); } else { try { const [fam, wt] = st.pic.font.split('|'); await document.fonts.load(`${wt} 100px "${fam}"`, 'ẮƯỜĐ'); } catch (e) {} mask = await buildSourceMask(W, H); }
+  const { part, cell } = buildPart(mask, W, H);
+  const texs = new Set(); st.questions.forEach(q => [q.text, q.explain, ...q.options].forEach(t => E.mathList(t).forEach(x => texs.add(x))));
+  if (texs.size) { await loadMathJax(); texs.forEach(t => { try { mathCache.set(t, texToInfo(t)); } catch (e) {} }); }
+  cur.present = presentColors(mask); const ds = { meta: Object.assign({}, st.meta), questions: st.questions };
+  const fills = E.makeTheme(Object.assign({}, ds, { meta: Object.assign({}, st.meta, { printMode: 'color' }), _colors: Object.keys(cur.present).map(Number) })).fill;
+  const data = window.GMBT_GAME.buildGameData(ds, part, cell, t => mathCache.get(t) || null, fills); data.askName = true; data.exam = true; data.sheet = o.sh || '';
+  const html = window.GMBT_GAME.gameHTML(data, o.md); try { window.__btbaDL = await cap('downloads'); } catch (e) {} document.open(); document.write(html); document.close(); }
+async function playMode() {
+  { const h = document.getElementById('plHide'); if (h) h.remove(); }
+  document.body.innerHTML = '<div style="height:100vh;display:grid;place-items:center;font-family:Segoe UI,Arial,sans-serif;color:#334155;font-size:18px">⏳ Đang mở game BỨC TRANH BÍ ẨN…</div>';
+  try { try { await initFonts(); } catch (e) {} const up = await window.GMBT_LINK.unpackObj(location.hash);
+    if (up.obj.v === 2) { await playV2(up.obj, up.rest); return; }
+    const o = await window.GMBT_LINK.unpackGame(location.hash); const m = o.m;
+    const part = E.rebuild(o.W, o.H, o.rid, o.c); part.regions.forEach((g, i) => { const v = o.d[i]; if (v >= 0) { const ok = v & 1, qo = v >> 1; g.code = { q: qo >> 3, o: qo & 7, ok: !!ok }; g.label = `${g.code.q + 1}-${LET[g.code.o]}`; } else { g.code = null; g.label = ''; } });
+    E.placeLabels(part, m.cm, m.L, Math.min(5, m.L), (t, pt) => E.textW(t, 'sans', true, pt));
+    const qs = o.q.map(a => ({ text: a[0], options: a[1], correct: a[2], colorHex: a[3], colorName: a[4], explain: a[5], color: 0 }));
+    const texs = new Set(); qs.forEach(q => [q.text, q.explain, ...q.options].forEach(t => E.mathList(t).forEach(x => texs.add(x))));
+    if (texs.size) { await loadMathJax(); texs.forEach(t => { try { mathCache.set(t, texToInfo(t)); } catch (e) {} }); }
+    const ds = { meta: { title: m.t, subtitle: m.s, pictureName: m.p, accent: m.a }, questions: qs };
+    const data = window.GMBT_GAME.buildGameData(ds, part, m.cm, t => mathCache.get(t) || null, {}); data.askName = true; data.exam = true; const html = window.GMBT_GAME.gameHTML(data, m.md);
+    document.open(); document.write(html); document.close();
+  } catch (e) { console.error(e); document.body.innerHTML = '<div style="height:100vh;display:grid;place-items:center;font-family:Arial;color:#b91c1c;font-size:18px;text-align:center;padding:20px">Link game không hợp lệ hoặc bị cắt ngắn.<br>Hãy sao chép lại đầy đủ link từ giáo viên.</div>'; } }
+function playerHome() { { const h = document.getElementById('plHide'); if (h) h.remove(); } document.body.innerHTML = '<div style="min-height:100vh;display:grid;place-items:center;background:#eef1f6;font-family:Segoe UI,Arial,sans-serif;padding:20px"><div style="background:#fff;border-radius:22px;padding:36px 28px;max-width:560px;width:100%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.12)"><div style="font-size:54px">🧩</div><h1 style="margin:6px 0;color:#1F3A5F;letter-spacing:.05em">BỨC TRANH BÍ ẨN</h1><p style="color:#475569;font-size:17px;line-height:1.5">Trang này dùng để chơi game giải mã.<br>Em hãy mở <b>đúng link game</b> thầy/cô gửi.<br>Nếu có link, em dán vào ô dưới đây:</p><input id="plIn" placeholder="Dán link game vào đây" style="width:100%;font-size:16px;padding:12px;border:2px solid #cbd5e1;border-radius:12px"><div id="plErr" style="color:#b91c1c;min-height:22px;margin-top:6px"></div><button id="plGo" style="border:0;background:#1F3A5F;color:#fff;font-size:17px;font-weight:700;padding:12px 28px;border-radius:12px;cursor:pointer">▶ Vào chơi</button><div style="color:#94a3b8;font-size:13px;margin-top:18px">© BỨC TRANH BÍ ẨN – Ms. Hằng Đỗ</div></div></div>';
+  const go = () => { const v = document.getElementById('plIn').value.trim(); const m = v.match(/#?(play-[A-Za-z0-9]+-\d)/); if (!m) { document.getElementById('plErr').textContent = 'Link chưa đúng. Hãy sao chép lại đầy đủ link từ thầy/cô.'; return; } location.hash = m[1]; playMode(); };
+  document.getElementById('plGo').onclick = go; document.getElementById('plIn').onkeydown = e => { if (e.key === 'Enter') go(); }; }
+try { console.info('[BTBA] start hash=' + (location.hash || '').length + ' player=' + !!window.BTBA_PLAYER); } catch (e) {}
+if (/^#play-/.test(location.hash)) { playMode(); } else if (window.BTBA_PLAYER) { let started = false; const tryPlay = () => { if (started || !/^#play-/.test(location.hash)) return false; started = true; playMode(); return true; };
+  document.body.innerHTML = '<div style="height:100vh;display:grid;place-items:center;font-family:Segoe UI,Arial,sans-serif;color:#334155;font-size:18px">⏳ Đang mở game BỨC TRANH BÍ ẨN…</div>'; { const h = document.getElementById('plHide'); if (h) h.remove(); }
+  window.addEventListener('hashchange', tryPlay); let n = 0; const iv = setInterval(() => { if (tryPlay() || ++n > 24) { clearInterval(iv); if (!started) playerHome(); } }, 250); } else
+(async function init() { $('#status').textContent = 'Đang tải phông chữ…'; try { await initFonts(); } catch (e) { console.warn(e); } try { await document.fonts.ready; } catch (e) {} syncAll(); recompute(); window.__ready = true; })();
+</script>
+</body>
+</html>
